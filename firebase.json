@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "greenland-pm-aac8d",
     "public": "dist/browser",
     "ignore": [
       "firebase.json",

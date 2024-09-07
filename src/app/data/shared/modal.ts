@@ -1,11 +1,11 @@
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmAddModal } from '../../../../../shared_modal/modal/confirm-add/confirm-modal.component';
-import { ConfirmUpdateModal } from '../../../../../shared_modal/modal/confirm-update/confirm-modal.component';
-import { ConfirmModal } from '../../../../../shared_modal/modal/confirm/confirm-modal.component';
-import { ErrorInfoModal } from '../../../../../shared_modal/modal/error-info/errorinfo-modal.component';
-import { LoadingModal } from '../../../../../shared_modal/modal/loading/loading-modal.component';
-import { SuccessInfoModal } from '../../../../../shared_modal/modal/success-info/successinfo-modal.component';
 import { inject } from '@angular/core';
+import { ConfirmAddModal } from '../../../../shared_modal/modal/confirm-add/confirm-modal.component';
+import { ConfirmUpdateModal } from '../../../../shared_modal/modal/confirm-update/confirm-modal.component';
+import { ConfirmModal } from '../../../../shared_modal/modal/confirm/confirm-modal.component';
+import { ErrorInfoModal } from '../../../../shared_modal/modal/error-info/errorinfo-modal.component';
+import { LoadingModal } from '../../../../shared_modal/modal/loading/loading-modal.component';
+import { SuccessInfoModal } from '../../../../shared_modal/modal/success-info/successinfo-modal.component';
 
 export class CustomModal {
   modalService = inject(NgbModal);
