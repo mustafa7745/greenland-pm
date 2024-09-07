@@ -17,6 +17,7 @@ import { ModalUpdateActualPrice } from '../update/actualPrice/update.component';
 import { ModalSearchOffer } from '../../search/offers/search.component';
 import { ModalUpdateOfferQuantity } from '../update/offerQuantity/update.component';
 import { ModalUpdateDeliveryPrice } from '../update/price/update.component';
+import { ModalReadUserLocations } from '../../user-locations/read/read.component';
 
 @Component({
   selector: 'order-products-info',
@@ -518,6 +519,29 @@ export class ProductsModal {
       this.products.discount = null;
     });
   }
+  openModalChooseLocation(item: any) {
+    const a = this.requestServer.sharedMethod.customModal.modalService.open(
+      ModalReadUserLocations,
+      {
+        keyboard: false,
+        backdrop: 'static',
+        centered: true,
+      }
+    );
+    const data3 = {
+      tag: 'deleteOrderDiscount',
+      inputOrderId: this.data.id,
+      inputOrderDiscountId: item.id,
+    };
+    a.componentInstance.onOpenFromProducts(this.data.userId);
+    a.result.then((r) => {
+      const data = JSON.parse(r)
+      this.updateOrderLocation(data.id);
+      // ssss
+      // this.products.discount = null;
+    });
+  }
+
   openModalUpdateDiscountAmount(item: any) {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
       ModalUpdateDiscountAmount,
@@ -579,47 +603,66 @@ export class ProductsModal {
     }
   }
   addProductToOrder() {
-    const data2 = this.requestServer.encryptData2();
-    if (data2.length > 0) {
-      const loadingModal =
-        this.requestServer.sharedMethod.customModal.loadingModal();
-      loadingModal.componentInstance.title =
-        'جاري الاضافة الجلسه يرجى الانتظار ';
-      const formData =
-        this.requestServer.sharedMethod.apiFormData.getFormData1();
+    const loadingModal =
+      this.requestServer.sharedMethod.customModal.loadingModal();
+    loadingModal.componentInstance.title = 'جاري الاضافة الجلسه يرجى الانتظار ';
 
-      //
+    var data3 = {
+      tag: 'addProductToOrder',
+      inputOrderId: this.data.id,
+      inputProductId: this.searchedProduct.id,
+      inputProductQuantity: this.productQuantity,
+    };
 
-      var data3 = JSON.stringify({
-        tag: 'addProductToOrder',
-        inputOrderId: this.data.id,
-        inputProductId: this.searchedProduct.id,
-        inputProductQuantity: this.productQuantity,
-      });
+    this.requestServer.request2(
+      data3,
+      this.requestServer.sharedMethod.urls.ordersUrl,
+      (result) => {
+        loadingModal.close();
+        // this.activeModal.close(result);
+        this.products.products.push(JSON.parse(result));
+        const successModal =
+          this.requestServer.sharedMethod.customModal.successModal();
+        successModal.componentInstance.result = 'تم بنجاح';
+        this.searchedProduct = null;
+      },
+      (error) => {
+        loadingModal.close();
+        const errorModal =
+          this.requestServer.sharedMethod.customModal.errorModal();
+        errorModal.componentInstance.result = error;
+      }
+    );
+  }
+  updateOrderLocation(id: string) {
+    const loadingModal =
+      this.requestServer.sharedMethod.customModal.loadingModal();
+    loadingModal.componentInstance.title = 'جاري الاضافة الجلسه يرجى الانتظار ';
 
-      formData.set('data2', data2);
-      formData.set('data3', data3);
-      //
-      this.requestServer.request(
-        formData,
-        this.requestServer.sharedMethod.urls.ordersUrl,
-        (result) => {
-          loadingModal.close();
-          // this.activeModal.close(result);
-          this.products.products.push(JSON.parse(result));
-          const successModal =
-            this.requestServer.sharedMethod.customModal.successModal();
-          successModal.componentInstance.result = 'تم بنجاح';
-          this.searchedProduct = null;
-        },
-        (error) => {
-          loadingModal.close();
-          const errorModal =
-            this.requestServer.sharedMethod.customModal.errorModal();
-          errorModal.componentInstance.result = error;
-        }
-      );
-    }
+    var data3 = {
+      tag: 'updateUserLocation',
+      inputUserLocationId: id,
+      inputOrderDeliveryId: this.products.delivery.id,
+    };
+
+    this.requestServer.request2(
+      data3,
+      this.requestServer.sharedMethod.urls.ordersUrl,
+      (result) => {
+        loadingModal.close();
+        // this.activeModal.close(result);
+        this.deliveryLocation = null;
+        const successModal =
+          this.requestServer.sharedMethod.customModal.successModal();
+        successModal.componentInstance.result = 'تم بنجاح';
+      },
+      (error) => {
+        loadingModal.close();
+        const errorModal =
+          this.requestServer.sharedMethod.customModal.errorModal();
+        errorModal.componentInstance.result = error;
+      }
+    );
   }
   addOfferToOrder() {
     const loadingModal =
