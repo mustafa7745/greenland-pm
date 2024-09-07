@@ -265,7 +265,7 @@ export class ProductsModal {
         // this.resultData = res;
         const products = JSON.parse(res);
         console.log(products);
-        
+
         this.products = products;
       },
       (e) => {
@@ -280,7 +280,6 @@ export class ProductsModal {
     );
   }
   search() {}
- 
 
   openModalDeleteProducts() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
@@ -508,6 +507,7 @@ export class ProductsModal {
     );
     const data3 = {
       tag: 'deleteOrderDiscount',
+      inputOrderId: this.data.id,
       inputOrderDiscountId: item.id,
     };
     a.componentInstance.onOpen(
