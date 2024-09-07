@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { ResquestServer } from '../../app/data/shared/requestServer';
-import { StateController } from '../../app/data/shared/stateController';
-import { ProductsModal } from '../../app/products/read/read.component';
+import { ResquestServer } from '../../data/shared/requestServer';
+import { StateController } from '../../data/shared/stateController';
+import { ProductsModal } from '../../products/read/read.component';
 
 @Component({
   selector: 'order',
