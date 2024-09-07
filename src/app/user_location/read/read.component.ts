@@ -3,12 +3,11 @@ import { Component, inject } from '@angular/core';
 import { NgbActiveModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { ResquestServer } from '../../data/shared/requestServer';
-import { GoogleMapsModule } from '@angular/google-maps';
 
 @Component({
   selector: 'location',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbDropdownModule,GoogleMapsModule],
+  imports: [CommonModule, FormsModule, NgbDropdownModule],
   templateUrl: './read.component.html',
 })
 export class UserLocationModal {
