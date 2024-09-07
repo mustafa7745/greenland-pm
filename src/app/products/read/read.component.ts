@@ -519,7 +519,7 @@ export class ProductsModal {
       this.products.discount = null;
     });
   }
-  openModalChooseLocation(item: any) {
+  openModalChooseLocation() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
       ModalReadUserLocations,
       {
@@ -528,15 +528,10 @@ export class ProductsModal {
         centered: true,
       }
     );
-    const data3 = {
-      tag: 'deleteOrderDiscount',
-      inputOrderId: this.data.id,
-      inputOrderDiscountId: item.id,
-    };
+
     a.componentInstance.onOpenFromProducts(this.data.userId);
     a.result.then((r) => {
-      const data = JSON.parse(r)
-      this.updateOrderLocation(data.id);
+      this.updateOrderLocation(r.id);
       // ssss
       // this.products.discount = null;
     });
@@ -642,7 +637,7 @@ export class ProductsModal {
     var data3 = {
       tag: 'updateUserLocation',
       inputUserLocationId: id,
-      inputOrderDeliveryId: this.products.delivery.id,
+      inputOrderDeliveryId: this.orderDelivery.id,
     };
 
     this.requestServer.request2(
@@ -652,6 +647,8 @@ export class ProductsModal {
         loadingModal.close();
         // this.activeModal.close(result);
         this.deliveryLocation = null;
+        this.orderDelivery = JSON.parse(result);
+
         const successModal =
           this.requestServer.sharedMethod.customModal.successModal();
         successModal.componentInstance.result = 'تم بنجاح';
