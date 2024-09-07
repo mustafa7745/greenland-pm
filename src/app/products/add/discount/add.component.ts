@@ -27,6 +27,8 @@ export class ModalAddDiscount {
     return !(this.amount.length > 0 && this.type.length > 0);
   }
   onSave() {
+    console.log(this.type);
+    
     this.addConfirm();
   }
   onOpen(data: any) {

@@ -781,9 +781,7 @@ export class ProductsModal {
 
   getAllFinalPrice() {
     var sum = this.getProductsFinalPrice() + this.getOffersFinalPrice();
-    if (this.products.delivery) {
-      sum = sum + Number(this.products.delivery.price);
-    }
+    
     if (this.products.discount) {
       const amount = this.products.discount.amount;
       if (this.products.discount.type == '0') {
@@ -794,6 +792,9 @@ export class ProductsModal {
       } else {
         sum = sum - amount;
       }
+    }
+    if (this.products.delivery) {
+      sum = sum + Number(this.products.delivery.price);
     }
     return sum;
   }

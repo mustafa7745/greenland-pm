@@ -36,38 +36,30 @@ export class CollectionComponent {
     });
   }
   async read() {
-    console.log('mustafafaffa');
-    // aw;
-    const data2 = this.requestServer.encryptData2();
-    if (data2.length > 0) {
-      this.isLoading = true;
-      this.isError = false;
-      const formData =
-        this.requestServer.sharedMethod.apiFormData.getFormData1();
-      formData.set('data2', data2);
-      const data3 = {
-        tag: 'read',
-        inputDeliveryManId: this.resultSearchData.id,
-      };
-      formData.set('data3', JSON.stringify(data3));
+    const loadingModal =
+      this.requestServer.sharedMethod.customModal.loadingModal();
+    loadingModal.componentInstance.title = '  يرجى الانتظار ';
 
-      this.requestServer.request(
-        formData,
-        this.requestServer.sharedMethod.urls.collectionsUrl,
-        (res) => {
-          this.isLoading = false;
-          this.isError = false;
-          // this.resultData = res;
-          const data = JSON.parse(res);
-          this.resultData = data;
-        },
-        (e) => {
-          this.isLoading = false;
-          this.isError = true;
-          this.error = e;
-        }
-      );
-    }
+    const data3 = {
+      tag: 'read',
+      inputDeliveryManId: this.resultSearchData.id,
+    };
+
+    this.requestServer.request2(
+      data3,
+      this.requestServer.sharedMethod.urls.collectionsUrl,
+      (res) => {
+        loadingModal.close();
+        const data = JSON.parse(res);
+        this.resultData = data;
+      },
+      (e) => {
+        loadingModal.close();
+        const errorModal =
+          this.requestServer.sharedMethod.customModal.errorModal();
+        errorModal.componentInstance.result = e;
+      }
+    );
   }
   search() {
     this.resultSearchData = null;
@@ -146,7 +138,6 @@ export class CollectionComponent {
     );
     a.componentInstance.onOpen(item);
   }
- 
 
   addToSelected(item: any) {
     this.stateController.selected.push(item);
@@ -158,7 +149,7 @@ export class CollectionComponent {
     var sum = 0;
     this.resultData.map((item) => {
       if (this.stateController.selected.includes(item.id)) {
-        sum += item.price;
+        sum += Number(item.price);
       }
     });
     return sum;
@@ -167,7 +158,7 @@ export class CollectionComponent {
     var sum = 0;
     this.resultData.map((item) => {
       // if (this.stateController.selected.includes(item.id)) {
-      sum += item.price;
+      sum += Number(item.price);
       // }
     });
     return sum;
@@ -217,7 +208,7 @@ export class CollectionComponent {
           loadingModal.close();
           // this.activeModal.close(result);
           this.resultData = [];
-          this.stateController.selected = []
+          this.stateController.selected = [];
           const successModal =
             this.requestServer.sharedMethod.customModal.successModal();
           successModal.componentInstance.result = 'تم بنجاح';
