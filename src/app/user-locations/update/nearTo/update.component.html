@@ -1,0 +1,39 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">تحديث</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col">
+      <input
+        type="text"
+        class="form-control"
+        placeholder=""
+        [(ngModel)]="data.nearTo"
+        disabled
+      />
+
+      <input
+        type="text"
+        class="form-control"
+        placeholder="القيمة الجديدة"
+        [(ngModel)]="newName"
+      />
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-success"
+    [disabled]="isDisabledSaveButton()"
+    (click)="onSave()"
+  >
+    Save
+  </button>
+</div>

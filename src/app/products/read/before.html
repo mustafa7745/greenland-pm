@@ -1,0 +1,566 @@
+<div *ngIf="isGetDataOrderDelivery == true">
+    <div style="text-align: center">
+      <span>بيانات التوصيل</span>
+      <div *ngIf="orderDelivery" style="border: 1px solid; border-radius: 7px">
+        <div>
+          <div>موصل الطلب</div>
+          <div *ngIf="deliveryMan">
+            {{ deliveryMan.name }}
+            <button class="btn btn-primary" (click)="sendRequsetConfirmOrder()">
+              ارسال الطلب
+            </button>
+          </div>
+          <div *ngIf="orderDelivery.deliveryManId">
+            <div *ngIf="orderDeliveryMan">
+              <span>{{ orderDeliveryMan.name }}</span>
+              <span>{{ orderDeliveryMan.phone }}</span>
+              <div *ngIf="!data.systemOrderNumber">
+                <input
+                  type="text"
+                  placeholder="رقم الطلب في الفاتورة"
+                  [(ngModel)]="systemOrderNumber"
+                />
+                <button
+                  class="btn btn-primary"
+                  (click)="updateSystemOrderNumber()"
+                >
+                  حفظ
+                </button>
+              </div>
+              <div *ngIf="data.systemOrderNumber">
+                <span>رقم الطلب في الفاتورة</span>
+                {{ data.systemOrderNumber }}
+              </div>
+              <button
+                (click)="openChooseDeliveryManModal()"
+                class="btn btn-primary"
+              >
+                تغيير موصل اخر
+              </button>
+            </div>
+            <div *ngIf="!orderDeliveryMan">
+              <button (click)="readOrderDeliveryMan()" class="btn btn-primary">
+                عرض الموصل
+              </button>
+            </div>
+          </div>
+          <div *ngIf="!orderDelivery.deliveryManId">
+            <button
+              (click)="openChooseDeliveryManModal()"
+              class="btn btn-primary"
+            >
+              اختيار موصل
+            </button>
+          </div>
+          <!--  -->
+          <div>
+            سعر التوصيل للموصل
+
+            <span (click)="openModalUpdateActualPrice(orderDelivery)">
+              {{ orderDelivery.actualPrice }}
+            </span>
+          </div>
+          <div>موقع توصيل الطلب</div>
+        </div>
+      </div>
+      <div *ngIf="!orderDelivery" style="border: 1px solid; border-radius: 7px">
+        لايوجد توصيل في هذا الطلب
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-hover" style="direction: rtl" *ngIf="products">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">الصنف</th>
+        <th scope="col">السعر</th>
+        <th scope="col">الكمية</th>
+        <th scope="col">الاجمالي</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td style="background-color: rgb(68, 131, 198)">المنتجات</td>
+        <td>
+          <button
+            (click)="openModelSearchProduct()"
+            class="btn btn-outline-primary"
+            *ngIf="!searchedProduct"
+          >
+            اضافة
+          </button>
+          <div style="display: flex" *ngIf="searchedProduct">
+            <input
+              type="number"
+              placeholder="الكمية"
+              [(ngModel)]="productQuantity"
+            />
+            <span>{{ searchedProduct.name }}</span>
+            <button (click)="addProductToOrder()">اضافة الى الطلب</button>
+          </div>
+        </td>
+        <td>
+          <div *ngIf="stateController.selected.length > 0">
+            <Button (click)="openModalDeleteProducts()"> حذف </Button>
+          </div>
+        </td>
+      </tr>
+      <ng-template ngFor let-item [ngForOf]="products.products" let-c="index">
+        <tr>
+          <td>
+            {{ c + 1 }}
+          </td>
+          <td>
+            {{ item.productName }}
+          </td>
+          <td>
+            {{ item.productPrice }}
+          </td>
+          <td (click)="openModalUpdateProductQuantity(item)">
+            {{ item.productQuantity }}
+          </td>
+          <td>
+            {{ item.productPrice * item.productQuantity }}
+          </td>
+          <td>
+            <span>
+              <button
+                *ngIf="stateController.selected.includes(item.id) === false"
+                (click)="stateController.addToSelected(item.id)"
+              >
+                تحديد
+              </button>
+              <button
+                *ngIf="stateController.selected.includes(item.id) === true"
+                (click)="stateController.removeFromSelected(item.id)"
+              >
+                الغاء التحديد
+              </button>
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>الاجمالي</td>
+        <td>{{ getProductsFinalPrice() }}</td>
+      </tr>
+
+      <!--  -->
+      <tr>
+        <td style="background-color: rgb(68, 131, 198)">العروض</td>
+        <td>
+          <button
+            (click)="openModelSearchOffer()"
+            class="btn btn-outline-primary"
+            *ngIf="!searchedOffer"
+          >
+            اضافة
+          </button>
+          <div style="display: flex" *ngIf="searchedOffer">
+            <input
+              type="number"
+              placeholder="الكمية"
+              [(ngModel)]="offerQuantity"
+            />
+            <span>{{ searchedOffer.name }}</span>
+            <button (click)="addOfferToOrder()" class="btn btn-primary">
+              اضافة الى الطلب
+            </button>
+          </div>
+        </td>
+        <td>
+          <div *ngIf="offersStateController.selected.length > 0">
+            <Button (click)="openModalDeleteOffers()"> حذف </Button>
+          </div>
+        </td>
+      </tr>
+      <ng-template ngFor let-item [ngForOf]="products.offers" let-c="index">
+        <tr>
+          <td>
+            {{ c + 1 }}
+          </td>
+          <td>
+            {{ item.offerName }}
+          </td>
+          <td>
+            {{ item.offerPrice }}
+          </td>
+          <td (click)="openModalUpdateOfferQuantity(item)">
+            {{ item.offerQuantity }}
+          </td>
+          <td>
+            {{ item.offerPrice * item.offerQuantity }}
+          </td>
+          <td>
+            <span>
+              <button
+                *ngIf="
+                  offersStateController.selected.includes(item.id) === false
+                "
+                (click)="offersStateController.addToSelected(item.id)"
+              >
+                تحديد
+              </button>
+              <button
+                *ngIf="
+                  offersStateController.selected.includes(item.id) === true
+                "
+                (click)="offersStateController.removeFromSelected(item.id)"
+              >
+                الغاء التحديد
+              </button>
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>الاجمالي</td>
+        <td>{{ getOffersFinalPrice() }}</td>
+      </tr>
+      <!--  -->
+
+      <tr>
+        <td style="background-color: rgb(68, 131, 198)">التوصيل</td>
+        <td>
+          <button
+            (click)="openModelSearchProduct()"
+            class="btn btn-outline-primary"
+            *ngIf="!products.delivery"
+          >
+            اضافة
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="products.delivery">
+        <td>1</td>
+        <td>توصيل الطلب</td>
+        <td (click)="openModalUpdateDeliveryPrice()">
+          {{ products.delivery.price }}
+        </td>
+        <td>1</td>
+        <td>{{ products.delivery.price }}</td>
+      </tr>
+      <!--  -->
+      <tr>
+        <td style="background-color: rgb(68, 131, 198)">الخصم</td>
+        <td>
+          <button
+            (click)="openModalAddDiscount()"
+            class="btn btn-outline-primary"
+            *ngIf="!products.discount"
+          >
+            اضافة
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="products.discount">
+        <td>1</td>
+        <td
+          style="background-color: rgb(218, 86, 38)"
+          *ngIf="products.discount.type == '0'"
+          (click)="openModalUpdateDiscountType(products.discount)"
+        >
+          خصم مئوي
+        </td>
+        <td
+          style="background-color: rgb(218, 86, 38)"
+          *ngIf="products.discount.type == '1'"
+          (click)="openModalUpdateDiscountType(products.discount)"
+        >
+          خصم رئيسي
+        </td>
+        <td (click)="openModalUpdateDiscountAmount(products.discount)">
+          {{ products.discount.amount }}
+        </td>
+        <td>1</td>
+        <td>{{ products.discount.amount }}</td>
+        <td>
+          <button
+            class="btn btn-danger"
+            (click)="openModalDeleteOrderDiscount(products.discount)"
+          >
+            حذف
+          </button>
+        </td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="background-color: rgb(109, 198, 68)">الاجمالي</td>
+        <td style="background-color: rgb(109, 198, 68)">
+          {{ getAllFinalPrice() }}
+        </td>
+      </tr>
+
+      <!-- <tr>
+            <td>
+              {{ resultData.products.length + 1 }}
+            </td>
+            <td>توصيل الطلب</td>
+            <td>
+              {{ resultData.delivery.price }}
+            </td>
+            <td>1</td>
+            <td>
+              {{ resultData.delivery.price }}
+            </td>
+          </tr> -->
+    </tbody>
+    <!-- <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="background-color: rgb(109, 198, 68)">الاجمالي</td>
+            <td style="background-color: rgb(109, 198, 68)">
+              {{ resultData.productsFinalPrice }}
+            </td>
+          </tr>
+          <tr *ngIf="resultData.discount">
+            <td></td>
+            <td>
+              <button
+                (click)="openModalDeleteOrderDiscount(resultData.discount)"
+                class="btn btn-danger"
+              >
+                حذف
+              </button>
+            </td>
+            <td
+              style="background-color: rgb(218, 86, 38)"
+              *ngIf="resultData.discount.type == '1'"
+              (click)="openModalUpdateDiscountType(resultData.discount)"
+            >
+              خصم مئوي
+            </td>
+            <td
+              style="background-color: rgb(218, 86, 38)"
+              *ngIf="resultData.discount.type == '0'"
+              (click)="openModalUpdateDiscountType(resultData.discount)"
+            >
+              خصم رئيسي
+            </td>
+
+            <td style="background-color: rgb(218, 86, 38)">الكمية</td>
+            <td
+              style="background-color: rgb(218, 86, 38)"
+              (click)="openModalUpdateDiscountAmount(resultData.discount)"
+            >
+              {{ resultData.discount.amount }}
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="background-color: cadetblue">الاجمالي النهائي</td>
+            <td style="background-color: cadetblue">
+              {{ resultData.finalPrice }}
+            </td>
+          </tr>
+        </tfoot> -->
+  </table>
+
+
+
+  <!-- Delivery -->
+
+
+  <div *ngIf="isGetDataOrderDelivery" class="order-delivery-container">
+    <div class="header">
+      <span>بيانات التوصيل</span>
+    </div>
+
+    <ng-container *ngIf="orderDelivery; else noDelivery">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th colspan="2">موصل الطلب</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="deliveryMan">
+            <td>اسم الموصل:</td>
+            <td>{{ deliveryMan.name }}</td>
+          </tr>
+
+          <tr *ngIf="orderDelivery.deliveryManId; else selectDeliveryMan">
+            <div *ngIf="!orderDeliveryMan">
+              <button (click)="readOrderDeliveryMan()" class="btn btn-primary">
+                عرض الموصل
+              </button>
+            </div>
+            <td>
+              <ng-container *ngIf="orderDeliveryMan">
+                <div>تفاصيل الموصل:</div>
+                <div class="delivery-man-info">
+                  <span>{{ orderDeliveryMan.name }}</span>
+                  <span>{{ orderDeliveryMan.phone }}</span>
+                  <ng-container
+                    *ngIf="!data.systemOrderNumber; else orderNumber"
+                  >
+                    <div class="order-number-update">
+                      <input
+                        type="text"
+                        placeholder="رقم الطلب في الفاتورة"
+                        [(ngModel)]="systemOrderNumber"
+                      />
+                      <button
+                        class="btn btn-primary"
+                        (click)="updateSystemOrderNumber()"
+                      >
+                        حفظ
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
+              <ng-template #orderNumber>
+                <div class="order-number-display">
+                  <span>رقم الطلب في الفاتورة:</span>
+                  {{ data.systemOrderNumber }}
+                </div>
+              </ng-template>
+              <button
+                (click)="openChooseDeliveryManModal()"
+                class="btn btn-primary"
+              >
+                تغيير موصل اخر
+              </button>
+            </td>
+            <div>وقت القبول</div>
+            <div>{{ getDate(orderDelivery.acceptance.updatedAt) }}</div>
+            <div>وقت ارسال طلب القبول</div>
+            <div>{{ getDate(orderDelivery.acceptance.createdAt) }}</div>
+          </tr>
+          <ng-template #selectDeliveryMan>
+            <!-- <tr>
+            <td colspan="2">
+              <button (click)="openChooseDeliveryManModal()" class="btn btn-primary">اختيار موصل</button>
+            </td>
+          </tr> -->
+
+            <tr
+              *ngIf="
+                orderDelivery.acceptance;
+                else selectDeliveryManNoAcceptance
+              "
+            >
+              {{
+                orderDelivery.acceptance.status == "0"
+                  ? "لم يقبل الطلب بعد"
+                  : "تمقبول الطلب"
+              }}
+              <div *ngIf="!orderDeliveryMan">
+                <button
+                  (click)="
+                    readOrderDeliveryManOnAcceptance(
+                      orderDelivery.acceptance.deliveryManId
+                    )
+                  "
+                  class="btn btn-primary"
+                >
+                  عرض الموصل
+                </button>
+              </div>
+              <td>
+                <ng-container *ngIf="orderDeliveryMan">
+                  <div>تفاصيل الموصل:</div>
+                  <div class="delivery-man-info">
+                    <span>{{ orderDeliveryMan.name }}</span>
+                    <span>{{ orderDeliveryMan.phone }}</span>
+                    <div *ngIf="orderDelivery.acceptance.status == '1'">
+                      <ng-container
+                        *ngIf="!data.systemOrderNumber; else orderNumber"
+                      >
+                        <div class="order-number-update">
+                          <input
+                            type="text"
+                            placeholder="رقم الطلب في الفاتورة"
+                            [(ngModel)]="systemOrderNumber"
+                          />
+                          <button
+                            class="btn btn-primary"
+                            (click)="updateSystemOrderNumber()"
+                          >
+                            حفظ
+                          </button>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-template #orderNumber>
+                  <div class="order-number-display">
+                    <span>رقم الطلب في الفاتورة:</span>
+                    {{ data.systemOrderNumber }}
+                  </div>
+                </ng-template>
+                <button
+                  (click)="openChooseDeliveryManModal()"
+                  class="btn btn-primary"
+                >
+                  تغيير موصل اخر
+                </button>
+              </td>
+            </tr>
+            <ng-template #selectDeliveryManNoAcceptance>
+              <tr>
+                <td colspan="2">
+                  <button
+                    (click)="openChooseDeliveryManModal()"
+                    class="btn btn-primary"
+                  >
+                    اختيار موصل
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </ng-template>
+        </tbody>
+
+        <thead>
+          <tr>
+            <th colspan="2">سعر التوصيل</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>سعر التوصيل للموصل:</td>
+            <td>
+              <span (click)="openModalUpdateActualPrice(orderDelivery)">
+                {{ orderDelivery.actualPrice }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+
+        <thead>
+          <tr>
+            <th colspan="2">موقع التوصيل</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="2">
+              <span>{{ orderDelivery.deliveryLocation }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+
+    <ng-template #noDelivery>
+      <div class="no-delivery">لا يوجد توصيل في هذا الطلب</div>
+    </ng-template>
+  </div>

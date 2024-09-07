@@ -1,0 +1,167 @@
+<!-- <button (click)="sendMessageToParent()">
+  send to parent
+</button>
+<span>{{c}}</span> -->
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">
+    <div style="text-align: center; direction: ltr">طلبات المستخدم السابقة</div>
+  </h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <!-- <button (click)="read()">read</button> -->
+  <div *ngIf="isLoading; then thenBlock; else elseBlock"></div>
+  <ng-template #thenBlock>
+    <div style="text-align: center">
+      <div class="spinner-border" role="status">
+        <span class="sr-only"></span>
+      </div>
+    </div>
+  </ng-template>
+  <!-- 1 -->
+  <ng-template #elseBlock>
+    <div *ngIf="isError; then thenBlock1; else elseBlock1"></div>
+    <ng-template #thenBlock1>
+      <div style="text-align: center">
+        <div>
+          <div
+            style="
+              border: 1px solid rgb(255, 8, 8);
+              border-radius: 60px;
+              width: 500px;
+              margin: auto;
+              height: 300px;
+              display: flex;
+              justify-items: center;
+              align-items: center;
+              background-color: aliceblue;
+            "
+          >
+            <div style="width: -webkit-fill-available">
+              <div style="margin: 10px; color: red">
+                {{ error }}
+              </div>
+
+              <button
+                *ngIf="!isSearchMode"
+                (click)="read()"
+                class="btn btn-outline-danger"
+              >
+                اعادة المحاولة
+              </button>
+              <button
+                *ngIf="isSearchMode"
+                (click)="search()"
+                class="btn btn-outline-danger"
+              >
+                اعادة المحاولة
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #elseBlock1>
+      <!--  -->
+      <div class="search" style="display: flex">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search Here .."
+          [(ngModel)]="searchText"
+        />
+        <button
+          type="submit"
+          class="btn btn-primary"
+          (click)="search()"
+          *ngIf="stateController.isLoadingInnerSearch === false"
+        >
+          بحث
+        </button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          disabled
+          *ngIf="stateController.isLoadingInnerSearch == true"
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+      <!--  -->
+      <table class="custom-table" style="direction: rtl">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">رقم الطلب</th>
+            <th scope="col">الحالة</th>
+            <th scope="col">تاريخ الطلب</th>
+          </tr>
+        </thead>
+        <div
+          *ngIf="resultSearch"
+          style="border: 1px solid; border-radius: 20px"
+        >
+          <tr
+            [style.background-color]="
+              resultSearch.situationId == '1'
+                ? '#86f786'
+                : resultSearch.situationId == '2'
+                ? 'red'
+                : 'white'
+            "
+          >
+            <td (click)="openProducts(resultSearch)">
+              {{ 1 }}
+            </td>
+            <td>
+              {{ resultSearch.id }}
+            </td>
+            <td>
+              {{ resultSearch.situation }}
+            </td>
+            <td>
+              {{ resultSearch.createdAt }}
+            </td>
+          </tr>
+        </div>
+
+        <tbody>
+          <ng-template ngFor let-item [ngForOf]="resultData" let-c="index">
+            <tr
+              [style.background-color]="
+                item.situationId == '1'
+                  ? '#86f786'
+                  : item.situationId == '2'
+                  ? 'red'
+                  : 'white'
+              "
+            >
+              <td (click)="openProducts(item)">
+                {{ c + 1 }}
+              </td>
+              <td>
+                {{ item.id }}
+              </td>
+              <td>
+                {{ item.situation }}
+              </td>
+              <td>
+                {{ item.createdAt }}
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </ng-template>
+  </ng-template>
+</div>

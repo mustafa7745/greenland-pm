@@ -1,0 +1,149 @@
+<!-- <button (click)="read()">read</button> -->
+
+<div *ngIf="isLoading; then thenBlock; else elseBlock"></div>
+<ng-template #thenBlock>
+  <div style="text-align: center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+</ng-template>
+<!-- 1 -->
+<ng-template #elseBlock>
+  <div *ngIf="isError; then thenBlock1; else elseBlock1"></div>
+  <ng-template #thenBlock1>
+    <div style="text-align: center">
+      <div>
+        <div
+          style="
+            border: 1px solid rgb(255, 8, 8);
+            border-radius: 60px;
+            width: 500px;
+            margin: auto;
+            height: 300px;
+            display: flex;
+            justify-items: center;
+            align-items: center;
+            background-color: aliceblue;
+          "
+        >
+          <div style="width: -webkit-fill-available">
+            <div style="margin: 10px; color: red">
+              {{ error }}
+            </div>
+
+            <button
+              *ngIf="!isSearchMode"
+              (click)="read()"
+              class="btn btn-outline-danger"
+            >
+              اعادة المحاولة
+            </button>
+            <button
+              *ngIf="isSearchMode"
+              (click)="search()"
+              class="btn btn-outline-danger"
+            >
+              اعادة المحاولة
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #elseBlock1>
+    <div class="search">
+      <div *ngIf="resultSearchData">
+        <div
+          style="
+            height: 80px;
+            background-color: aliceblue;
+            margin: 10px;
+            border-radius: 10px;
+            padding: 5px;
+            display: flex;
+            justify-items: center;
+            justify-content: space-between;
+          "
+        >
+          <span>
+            # {{ resultSearchData.id }}
+            <div>{{ getDate(resultSearchData.createdAt) }}</div>
+            <div>{{ resultSearchData.code }}</div>
+          </span>
+
+          <span>
+            {{ resultSearchData.situation }}
+          </span>
+
+          <button
+            (click)="openProducts(resultSearchData)"
+            class="btn btn-outline-success"
+          >
+            المنتجات
+          </button>
+        </div>
+      </div>
+      <span style="color: red">{{ stateController.errorInnerSearch }}</span>
+      <div style="display: flex">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="رقم الطلب"
+          [(ngModel)]="searchText"
+        />
+        <button
+          type="submit"
+          class="btn btn-primary"
+          (click)="search()"
+          *ngIf="stateController.isLoadingInnerSearch === false"
+        >
+          بحث
+        </button>
+        <button
+          class="btn btn-primary"
+          type="button"
+          disabled
+          *ngIf="stateController.isLoadingInnerSearch == true"
+        >
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="resultData.length == 0" style="text-align: center">
+      لاتوجد طلبات معلقة
+    </div>
+    <ng-template ngFor let-item [ngForOf]="resultData" let-c="index">
+      <div
+        style="
+          height: 80px;
+          background-color: aliceblue;
+          margin: 10px;
+          border-radius: 10px;
+          padding: 5px;
+          display: flex;
+          justify-items: center;
+          justify-content: space-between;
+        "
+      >
+        <div>
+          # {{ item.id }}
+          <div>{{ getDate(item.createdAt) }}</div>
+        </div>
+
+        <span>
+          {{ item.situation }}
+        </span>
+
+        <button (click)="openProducts(item)" class="btn btn-outline-success">
+          المنتجات
+        </button>
+      </div>
+    </ng-template>
+  </ng-template>
+</ng-template>

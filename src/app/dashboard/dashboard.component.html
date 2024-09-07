@@ -1,0 +1,82 @@
+<!-- <h1 class="group"> <a  routerLink="dashboard/groups" routerLinkActive="active" ></a>groups</h1> -->
+
+<ng-template #content let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title" id="offcanvas-basic-title">Profile update</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <nav>
+      <ul>
+        <li>
+          <a
+            routerLink="/dashboard/add-order"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            (click)="offcanvas.dismiss('Cross click')"
+            >اضافة طلب</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="/dashboard/orders"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            (click)="offcanvas.dismiss('Cross click')"
+            >الطلبات</a
+          >
+        </li>
+        <li>
+          <a
+            routerLink="/dashboard/collections"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            (click)="offcanvas.dismiss('Cross click')"
+            >التحصيل</a
+          >
+        </li>
+        <li>
+          <a (click)="importProducts()">استيراد المنتجات</a>
+        </li>
+        <li>
+          <a
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            (click)="updateToken()"
+            >تحديث الجلسة</a
+          >
+        </li>
+
+        <li style="position: absolute; bottom: 5px">
+          <a
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            (click)="logout()"
+            >تسجيل الخروج</a
+          >
+        </li>
+      </ul>
+    </nav>
+  </div>
+</ng-template>
+
+<div
+  style="
+    text-align: center;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  "
+>
+  <button class="btn btn-lg btn-outline-primary" (click)="open(content)">
+    قائمة الخيارات
+  </button>
+</div>
+
+<router-outlet></router-outlet>

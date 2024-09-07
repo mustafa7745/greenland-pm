@@ -1,0 +1,71 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">بحث عن عرض</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <span style="color: red">
+    {{ stateController.errorInnerSearch }}
+  </span>
+  <div class="search" style="display: flex">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search Here .."
+      [(ngModel)]="searchText"
+    />
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="search()"
+      *ngIf="stateController.isLoadingInnerSearch === false"
+    >
+      بحث
+    </button>
+    <button
+      class="btn btn-primary"
+      type="button"
+      disabled
+      *ngIf="stateController.isLoadingInnerSearch == true"
+    >
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+    </button>
+  </div>
+
+  <div *ngIf="result" style="direction: rtl">
+    <div *ngIf="result.length == 0">لاتوجد بيانات</div>
+    <ng-template
+      *ngIf="result.length > 0"
+      ngFor
+      let-item
+      [ngForOf]="result"
+      let-c="index"
+    >
+      <div
+        style="
+          direction: rtl;
+          display: flex;
+          justify-content: space-between;
+          margin-top: 20px;
+          border: 1px solid;
+          padding: 10px;
+          border-radius: 20px;
+          align-items: center;
+        "
+      >
+        <button class="btn btn-primary" (click)="choose(item)">اختيار</button>
+        <span>
+          {{ item.name }}
+        </span>
+      </div>
+    </ng-template>
+  </div>
+</div>

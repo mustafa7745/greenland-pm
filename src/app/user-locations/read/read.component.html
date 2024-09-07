@@ -1,0 +1,163 @@
+<!-- <button (click)="sendMessageToParent()">
+  send to parent
+</button>
+<span>{{c}}</span> -->
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">
+    <div style="text-align: center; direction: ltr">المنتجات</div>
+  </h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+
+<div class="modal-body">
+  <!-- <button (click)="read()">read</button> -->
+  <div *ngIf="isLoading; then thenBlock; else elseBlock"></div>
+  <ng-template #thenBlock>
+    <div style="text-align: center">
+      <div class="spinner-border" role="status">
+        <span class="sr-only"></span>
+      </div>
+    </div>
+  </ng-template>
+  <!-- 1 -->
+  <ng-template #elseBlock>
+    <div *ngIf="isError; then thenBlock1; else elseBlock1"></div>
+    <ng-template #thenBlock1>
+      <div style="text-align: center">
+        <div>
+          <div
+            style="
+              border: 1px solid rgb(255, 8, 8);
+              border-radius: 60px;
+              width: 500px;
+              margin: auto;
+              height: 300px;
+              display: flex;
+              justify-items: center;
+              align-items: center;
+              background-color: aliceblue;
+            "
+          >
+            <div style="width: -webkit-fill-available">
+              <div style="margin: 10px; color: red">
+                {{ error }}
+              </div>
+
+              <button
+                *ngIf="!isSearchMode"
+                (click)="read()"
+                class="btn btn-outline-danger"
+              >
+                اعادة المحاولة
+              </button>
+              <button *ngIf="isSearchMode" class="btn btn-outline-danger">
+                اعادة المحاولة
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #elseBlock1>
+      <div style="display: flex; justify-content: center; margin: 10px">
+        <button class="btn btn-primary" (click)="openModalAddUserLocation()">
+          اضافة
+        </button>
+      </div>
+      <table class="table table-hover" style="direction: rtl">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">المدينة</th>
+            <th scope="col">الشارع</th>
+            <th scope="col">بالقرب من</th>
+            <th scope="col">Latlong</th>
+            <th scope="col">Url</th>
+            <th scope="col">التحديث</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-template ngFor let-item [ngForOf]="resultData" let-c="index">
+            <tr>
+              <td>
+                {{ c + 1 }}
+              </td>
+              <td>
+                {{ item.city }}
+              </td>
+              <td>
+                {{ item.street }}
+              </td>
+              <td>
+                {{ item.nearTo }}
+              </td>
+
+              <td>
+                <button class="btn btn-success" (click)="copy(item)">
+                  نسخ
+                </button>
+              </td>
+              <td>
+                <a [href]="item.url" target="_blank"> الموقع </a>
+              </td>
+
+              <td>
+                <div class="btn-group me-3">
+                  <div
+                    class="btn-group"
+                    ngbDropdown
+                    role="group"
+                    aria-label="Button group with nested dropdown"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-primary dropdown-toggle-split"
+                      ngbDropdownToggle
+                    ></button>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                      <button ngbDropdownItem (click)="openModalUpdateStreet(item)">الشارع</button>
+                      <button ngbDropdownItem (click)="openModalUpdateNearTo(item)">بالقرب</button>
+                      <button ngbDropdownItem (click)="openModalUpdateUrl(item)">الموقع!</button>
+                      <button ngbDropdownItem (click)="openModalUpdateLatLong(item)">الرمز</button>
+                      <button ngbDropdownItem (click)="openModalUpdateContactPhone(item)">رقم التواصل</button>
+
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-success" (click)="choose(item)">
+                  اختيار
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </ng-template>
+  </ng-template>
+</div>
+
+<div *ngIf="show" class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div
+    class="toast"
+    [ngClass]="{ show: show, hide: !show }"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="toast-header">
+      <strong class="me-auto">{{ title }}</strong>
+      <button type="button" class="btn-close" (click)="hide()"></button>
+    </div>
+    <div class="toast-body">
+      {{ message }}
+    </div>
+  </div>
+</div>

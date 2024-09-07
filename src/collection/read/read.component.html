@@ -1,0 +1,82 @@
+<span style="color: red">{{ stateController.errorInnerSearch }}</span>
+<div style="display: flex">
+  <input
+    type="text"
+    class="form-control"
+    placeholder="رقم ألهاتف"
+    [(ngModel)]="searchText"
+  />
+  <button
+    type="submit"
+    class="btn btn-primary"
+    (click)="search()"
+    *ngIf="stateController.isLoadingInnerSearch === false"
+  >
+    بحث
+  </button>
+  <button
+    class="btn btn-primary"
+    type="button"
+    disabled
+    *ngIf="stateController.isLoadingInnerSearch == true"
+  >
+    <span
+      class="spinner-border spinner-border-sm"
+      role="status"
+      aria-hidden="true"
+    ></span>
+  </button>
+</div>
+<div *ngIf="resultSearchData">
+  <Button (click)="read()">عرض</Button>
+  {{ resultSearchData.name }}
+</div>
+<div>
+  <div *ngIf="resultData.length > 0">
+    <div>
+      <span>المبلغ الكلي: </span>
+      {{ getAllPrice() }}
+    </div>
+    <span>
+      <span>المبلغ المحدد: </span>
+      {{ getPriceSelected() }}
+    </span>
+    <button (click)="collectConfirm()">تحصيل</button>
+  </div>
+  <ng-template ngFor let-item [ngForOf]="resultData" let-c="index">
+    <div
+      style="
+        height: 80px;
+        background-color: aliceblue;
+        margin: 10px;
+        border-radius: 10px;
+        padding: 5px;
+        display: flex;
+        justify-items: center;
+        justify-content: space-between;
+      "
+    >
+      # {{ item.orderId }}
+      <span style="font-size: xx-large">
+        {{ item.price }}
+      </span>
+
+      <span>
+        <button
+          class="btn btn-primary"
+          *ngIf="stateController.selected.includes(item.id) === false"
+          (click)="stateController.addToSelected(item.id)"
+        >
+          تحديد
+        </button>
+        <button
+          class="btn btn-primary"
+          *ngIf="stateController.selected.includes(item.id) === true"
+          (click)="stateController.removeFromSelected(item.id)"
+        >
+          الغاء التحديد
+        </button>
+      </span>
+    </div>
+  </ng-template>
+</div>

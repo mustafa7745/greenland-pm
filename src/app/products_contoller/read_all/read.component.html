@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">
+    <div style="text-align: center; direction: ltr">المنتجات</div>
+  </h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <div *ngIf="properties.loadingRead; then thenBlock; else elseBlock"></div>
+  <ng-template #thenBlock>
+    <div style="text-align: center">
+      <div class="spinner-border" role="status">
+        <span class="sr-only"></span>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #elseBlock>
+    <div *ngIf="!properties.statusRead; then thenBlock; else elseBlock"></div>
+    <ng-template #thenBlock>{{ properties.readError }}</ng-template>
+    <ng-template #elseBlock>
+      <!--  -->
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Count</th>
+            <th scope="col">export</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              {{ properties.list.length }}
+            </td>
+            <td>
+              <button (click)="export(properties.list)">تصدير</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </ng-template>
+</div>

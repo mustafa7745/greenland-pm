@@ -1,0 +1,59 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">معلومات الطلب</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <!--  -->
+
+  <div>
+    <span> العميل: </span>
+    <span>
+      {{ data.user.name }}
+    </span>
+    <span>
+      {{ data.user.name }}
+    </span>
+  </div>
+  <div>
+    الاجمالي :
+    {{ getFinalPrice() }}
+    <span></span>
+  </div>
+  <table class="table table-hover" style="direction: rtl">
+    <thead>
+      <tr>
+        <th scope="col" style="width: 10px">#</th>
+        <th scope="col" style="width: 50px">المنتج</th>
+        <th scope="col" style="width: 50px">الكمية</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <ng-template
+        ngFor
+        let-item
+        [ngForOf]="data.inputOrderProjectsIdsWithQnt"
+        let-c="index"
+      >
+        <tr>
+          <td>
+            {{ c + 1 }}
+          </td>
+          <td>
+            {{ getProduct(item.id).name }}
+          </td>
+          <td>
+            {{ item.qnt }}
+          </td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+
+  <button class="btn btn-outline-primary" (click)="add()">تأكيد الطلب</button>
+</div>

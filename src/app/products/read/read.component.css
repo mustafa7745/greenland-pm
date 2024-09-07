@@ -1,0 +1,164 @@
+.order-delivery-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  direction: rtl; /* يحدد اتجاه النصوص والعناصر إلى اليمين */
+}
+
+.header {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: right; /* محاذاة النصوص إلى اليمين */
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: right; /* محاذاة النصوص إلى اليمين */
+}
+
+.table th {
+  background-color: #f4f4f4;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.table td {
+  background-color: #ffffff;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.delivery-man-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* محاذاة العناصر إلى اليسار في الاتجاه RTL */
+}
+
+.order-number-update,
+.order-number-display {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* محاذاة العناصر إلى اليسار في الاتجاه RTL */
+}
+
+.order-number-update input {
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.no-delivery {
+  color: #888;
+  font-style: italic;
+  margin-top: 15px;
+  text-align: right; /* محاذاة النصوص إلى اليمين */
+}
+
+/* تحسين مظهر الجدول */
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  direction: rtl;
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+}
+
+.custom-table thead {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.custom-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.custom-table tr:hover {
+  background-color: #d1e7dd;
+}
+
+.custom-table .highlight {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.custom-table .highlight-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.custom-table .highlight-button:hover {
+  background-color: #0056b3;
+}
+
+.custom-table .danger-button {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.custom-table .danger-button:hover {
+  background-color: #c82333;
+}
+
+.custom-table .primary-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.custom-table .primary-button:hover {
+  background-color: #0056b3;
+}
+
+.custom-table input[type="checkbox"] {
+  cursor: pointer;
+}

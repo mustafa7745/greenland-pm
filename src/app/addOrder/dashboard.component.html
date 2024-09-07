@@ -1,0 +1,283 @@
+<div>
+ 
+
+  <div *ngIf="!user" style="text-align: center">
+    <button (click)="openModalSearchUser()" class="btn btn-primary">
+      اختيار عميل
+    </button>
+  </div>
+  <div *ngIf="user" style="direction: rtl">
+    <div
+      class="user"
+      style="
+        border: 1px solid;
+        margin: 10px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px;
+        align-items: center;
+      "
+    >
+      <span (click)="openModalSearchUser()">
+        العميل
+        <span>
+          {{ user.name }}
+        </span> </span
+      ><button class="btn btn-primary" (click)="openModalUpdateUserName()">
+        تحديث الاسم
+      </button>
+      <button class="btn btn-primary" (click)="openModalUpdateUserPassword()">
+        تحديث الباسوورد
+      </button>
+    </div>
+
+    <div style="margin: 10px">
+      <button (click)="openModalReadOrders()" class="btn btn-primary">
+        عرض الطلبات السابقة
+      </button>
+    </div>
+
+    <!--  -->
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 60px;
+        background-color: gainsboro;
+      "
+    >
+      <div>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckDefault"
+          (change)="changeOrderWithDelivery($event)"
+          [checked]="orderWithDelivery"
+        />
+        <span>الطلب مع التوصيل</span>
+      </div>
+      <div
+        *ngIf="orderWithDelivery == true"
+        style="
+          display: flex;
+          align-items: center;
+          height: 60px;
+          background-color: gainsboro;
+        "
+      >
+        <button
+          *ngIf="!userLocation"
+          (click)="openModalReadUserLocations()"
+          class="btn btn-primary"
+        >
+          اختيار موقع التوصيل للعميل
+        </button>
+        <div *ngIf="userLocation" style="margin: 10px; border: 1px solid">
+          <span (click)="openModalReadUserLocations()">الشارع : </span>
+          <span>
+            {{ userLocation.street }}
+          </span>
+          <span> | </span>
+
+          <span>بالقرب من : </span>
+          <span>
+            {{ userLocation.nearTo }}
+          </span>
+          <span> | </span>
+
+          <input
+            type="number"
+            placeholder="سعر التوصيل"
+            [(ngModel)]="deliveryPrice"
+          />
+        </div>
+        <div>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="flexSwitchCheckDefault"
+            (change)="changeAutoSelectDelveryMan($event)"
+            [checked]="autoSelectDelveryMan"
+          />
+          <span>اختيار الي لموصل الطلب</span>
+        </div>
+        <div *ngIf="!autoSelectDelveryMan">
+          <button
+            *ngIf="!deliveryMan"
+            (click)="openModalReadReservations()"
+            class="btn btn-primary"
+          >
+            اختيار لموصل الطلب
+          </button>
+          <span *ngIf="deliveryMan" (click)="openModalReadReservations()">
+            {{ deliveryMan.name }}
+          </span>
+        </div>
+
+        <div>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="flexSwitchCheckDefault"
+            (change)="changeDelveryWithOrder($event)"
+            [checked]="isDeliveryWithOrder"
+          />
+          <span>احتساب التوصيل مع الطلب</span>
+        </div>
+      </div>
+    </div>
+
+    <!--  -->
+  </div>
+  <div class="table-scrollable" style="max-height: 400px; overflow-y: auto">
+    <table class="table table-hover" style="direction: rtl">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 10px">#</th>
+          <th scope="col" style="width: 50px">الرقم</th>
+          <th scope="col" style="width: 50px">المنتج</th>
+          <th scope="col" style="width: 50px">الكمية</th>
+
+          <th scope="col" style="width: 50px">السعر</th>
+          <th scope="col" style="width: 50px">الاجمالي</th>
+
+          <th scope="col" style="width: 50px">حذف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-template ngFor let-item [ngForOf]="products" let-c="index">
+          <tr>
+            <td>
+              {{ c + 1 }}
+            </td>
+            <td>
+              <input
+                class="form-control"
+                id="input{{ c }}"
+                type="text"
+                (keydown.enter)="foucsNext(c)"
+                [(ngModel)]="products[c].productNo"
+              />
+            </td>
+
+            <td>
+              <input
+                class="form-control"
+                type="text"
+                [(ngModel)]="products[c].productName"
+                disabled
+              />
+            </td>
+            <td>
+              <input
+                class="form-control"
+                id="quantity{{ c }}"
+                (keydown.enter)="foucsNextQ(c)"
+                [(ngModel)]="products[c].productQuantity"
+                type="text"
+                value="1"
+              />
+            </td>
+
+            <td>
+              <input
+                class="form-control"
+                type="text"
+                [(ngModel)]="products[c].productPrice"
+                disabled
+              />
+            </td>
+            <td *ngIf="products[c].productQuantity != ''">
+              <input
+                class="form-control"
+                type="text"
+                value="{{
+                  products[c].productPrice * toInt(products[c].productQuantity)
+                }}"
+              />
+            </td>
+            <td *ngIf="products.length > 1 && products[c].productName != null">
+              <button (click)="delete(c)" class="btn btn-danger">حذف</button>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    style="
+      height: 120px;
+      background-color: bisque;
+      text-align: center;
+
+      font-weight: bolder;
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      left: 0px;
+    "
+  >
+    <div
+      style="
+        font-size: xx-large;
+        direction: rtl;
+        display: flex;
+        justify-content: space-between;
+        padding: 3px;
+      "
+    >
+      اجمالي المنتجات : {{ getSumAllProducts() }}
+
+      <span> الاجمالي النهائي: {{ getFinalSum() }}</span>
+    </div>
+
+    <div style="direction: rtl; display: flex; justify-content: space-between">
+      <div>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          id="flexSwitchCheckDefault"
+          (change)="changeOrderHaveDiscount($event)"
+          [checked]="orderHaveDiscount"
+        />
+        <span>تفعيل الخصم</span>
+      </div>
+
+      <span *ngIf="orderHaveDiscount">
+        <input
+          class="form-check-input"
+          type="radio"
+          [checked]="discountMony"
+          (change)="changeDiscountTypeMony($event)"
+        />
+        <label class="form-check-label" for="flexRadioDefault1">
+          خصم نقدي
+        </label>
+
+        <input
+          class="form-check-input"
+          type="radio"
+          name="flexRadioDefault"
+          [checked]="disvcountPerc"
+          (change)="changeDiscountTypePerc($event)"
+        />
+        <label class="form-check-label" for="flexRadioDefault2">
+          خصم مئوي
+        </label>
+        <input
+          type="number"
+          placeholder="كمية الخصم"
+          [(ngModel)]="discountAmount"
+        />
+      </span>
+      <button (click)="getProducts()">get products</button>
+    </div>
+  </div>
+</div>

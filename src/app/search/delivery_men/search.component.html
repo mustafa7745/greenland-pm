@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">اختيار موصل الطلب</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <span style="color: red">
+    {{ stateController.errorInnerSearch }}
+  </span>
+  <div class="search" style="display: flex">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search Here .."
+      [(ngModel)]="searchText"
+    />
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="search()"
+      *ngIf="stateController.isLoadingInnerSearch === false"
+    >
+      بحث
+    </button>
+    <button
+      class="btn btn-primary"
+      type="button"
+      disabled
+      *ngIf="stateController.isLoadingInnerSearch == true"
+    >
+      <span
+        class="spinner-border spinner-border-sm"
+        role="status"
+        aria-hidden="true"
+      ></span>
+    </button>
+  </div>
+  <div *ngIf="result" style="direction: rtl;">
+    {{ result.name }}
+    <button class="btn btn-primary" (click)="choose()">اختيار</button>
+  </div>
+</div>

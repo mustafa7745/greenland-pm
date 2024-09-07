@@ -1,0 +1,7 @@
+.group{
+    display: inline;
+    background: skyblue;
+    padding: 5px;
+    margin: 10px;
+    cursor: pointer;
+}
