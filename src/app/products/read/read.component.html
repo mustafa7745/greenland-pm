@@ -22,13 +22,7 @@
     <div># {{ data.id }}</div>
     <div>{{ getDate(data.createdAt) }}</div>
   </h6>
-  <button
-    *ngIf="data.situationId != '1' && data.situationId != '2'"
-    class="btn btn-outline-danger"
-    (click)="openModalCencelOreder()"
-  >
-    الغاء الطلب
-  </button>
+
   <button
     type="button"
     class="btn-close"
@@ -587,6 +581,16 @@
   <!-- Component Template -->
 
   <!-- Component Styles (CSS or SCSS) -->
+
+  <div *ngIf="products">
+    <button
+      *ngIf="data.situationId != '1' && data.situationId != '2'"
+      class="btn btn-outline-danger"
+      (click)="openModalCencelOreder()"
+    >
+      الغاء الطلب
+    </button>
+  </div>
 
   <table class="custom-table" *ngIf="products">
     <thead>
