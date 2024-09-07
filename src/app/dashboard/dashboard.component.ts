@@ -91,7 +91,7 @@ export class DashboardComponent {
     );
   }
   logout() {
-    this.cartController.clearCart();
+    // this.cartController.clearCart();
     this.properties.sharedMethod.removeLogin();
     this.offcanvasService.dismiss();
     this.properties.sharedMethod.sharedNavigate.navigateToLogin();
