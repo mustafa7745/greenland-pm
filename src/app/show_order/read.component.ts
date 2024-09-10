@@ -46,15 +46,27 @@ export class ModalShowOrder {
     this.data = data;
   }
   add() {
-    const data3 = {
-      tag: 'add',
-      inputUserId: this.data.user.id,
-      inputOrderProductsIdsWithQnt: this.data.inputOrderProjectsIdsWithQnt,
-      inputUserLocationId: this.data.userLocation.id,
-      inputDeliveryManId:this.data.deliveryMan.id
-    };
+    var data3;
+    if ((this.data.tag == 'add')) {
+      data3 = {
+        tag: 'add',
+        inputUserId: this.data.user.id,
+        inputOrderProductsIdsWithQnt: this.data.inputOrderProjectsIdsWithQnt,
+        inputUserLocationId: this.data.userLocation.id,
+        inputDeliveryManId: this.data.deliveryMan.id,
+        inputOrderDeliveryPrice: this.data.price,
+        inputOrderDeliveryActualPrice: this.data.actualPrice,
+      };
+    } else {
+      data3 = {
+        tag: 'addWithoutDelivery',
+        inputUserId: this.data.user.id,
+        inputOrderProductsIdsWithQnt: this.data.inputOrderProjectsIdsWithQnt,
+      };
+    }
+
     console.log(data3);
-    
+
     const loadingModal =
       this.requestServer.sharedMethod.customModal.loadingModal();
     loadingModal.componentInstance.title = ' يرجى الانتظار';

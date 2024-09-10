@@ -53,7 +53,7 @@
     <div class="card p-3 mb-3">
       <div class="row">
         <!-- Left Section -->
-        <div class="col-md-6">
+        <div>
           <!-- User Location -->
           <div *ngIf="orderWithDelivery" class="mb-2">
             <div>
@@ -64,44 +64,72 @@
               >
                 اختيار موقع التوصيل للعميل
               </button>
-              <div *ngIf="userLocation" class="p-2 border rounded">
+              <div
+                *ngIf="userLocation"
+                class="p-2 border rounded"
+                style="display: flex; justify-content: space-between"
+              >
                 <small class="fw-bold">الشارع:</small>
                 <small>{{ userLocation.street }}</small>
                 <span class="mx-2">|</span>
                 <small class="fw-bold">بالقرب من:</small>
                 <small>{{ userLocation.nearTo }}</small>
                 <span class="mx-2">|</span>
-                <input
-                  type="number"
-                  class="form-control form-control-sm d-inline-block w-auto"
-                  placeholder="سعر التوصيل"
-                  [(ngModel)]="deliveryPrice"
-                />
+                <small class="fw-bold">السعر: </small>
+                <small>{{ userLocation.price }}</small>
+                <span class="mx-2">|</span>
+                <div>
+                  <div class="form-group"></div>
+                  <label for="deliveryPrice" class="form-label-sm"
+                    >سعر للعميل</label
+                  >
+                  <input
+                    type="number"
+                    id="deliveryPrice"
+                    class="form-control form-control-sm d-inline-block w-auto"
+                    placeholder="أدخل سعر التوصيل"
+                    [(ngModel)]="deliveryPrice"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="deliveryActualPrice" class="form-label-sm"
+                    >سعر للموصل</label
+                  >
+                  <input
+                    type="number"
+                    id="deliveryActualPrice"
+                    class="form-control form-control-sm d-inline-block w-auto"
+                    placeholder="أدخل سعر التوصيل"
+                    [(ngModel)]="deliveryActualPrice"
+                  />
+                </div>
+                <div>
+                  <!-- Delivery Man Selection -->
+                  <div>
+                    <button
+                      *ngIf="!deliveryMan"
+                      (click)="openModalReadReservations()"
+                      class="btn btn-primary btn-sm"
+                    >
+                      اختيار لموصل الطلب
+                    </button>
+                    <span class="fw-bold">الموصل:</span>
+                    <span
+                      *ngIf="deliveryMan"
+                      (click)="openModalReadReservations()"
+                      class="btn btn-outline-secondary btn-sm"
+                    >
+                      {{ deliveryMan.name }}
+                    </span>
+                  </div>
+                </div>
               </div>
+            
             </div>
           </div>
+         
         </div>
         <!-- Right Section -->
-        <div class="col-md-6">
-          <!-- Delivery Man Selection -->
-          <div *ngIf="orderWithDelivery" class="mb-2">
-            <button
-              *ngIf="!deliveryMan"
-              (click)="openModalReadReservations()"
-              class="btn btn-primary btn-sm"
-            >
-              اختيار لموصل الطلب
-            </button>
-            <span class="fw-bold">الموصل:</span>
-            <span
-              *ngIf="deliveryMan"
-              (click)="openModalReadReservations()"
-              class="btn btn-outline-secondary btn-sm"
-            >
-              {{ deliveryMan.name }}
-            </span>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -250,7 +278,6 @@
           [(ngModel)]="discountAmount"
         />
       </span>
-      <button (click)="getProducts()">get products</button>
     </div>
   </div>
 </div>

@@ -40,9 +40,21 @@ export class AddOrderComponent {
     this.getSumAllProducts();
     this.getSumAllProductsWithDelivery();
     console.log(event.key);
-    if (event.key == 'ArrowDown') {
+    if (event.key == 'Control') {
       if (this.user != null) {
-        this.openModalShowOrder();
+        if (this.orderWithDelivery) {
+          if (!this.userLocation) {
+            this.errorModal('يجب اختيار موقع العميل');
+          } else if (!this.deliveryMan) {
+            this.errorModal('يجب اختيار موصل');
+          } else if (this.getProducts().length == 0) {
+            this.errorModal('يجب اختيار منتج واحد على الاقل');
+          } else this.openModalShowOrder();
+        } else {
+          if (this.getProducts().length == 0) {
+            this.errorModal('يجب اختيار منتج واحد على الاقل');
+          } else this.openModalShowOrder();
+        }
       } else {
         this.errorModal('يجب اختيار مستخدم');
       }
@@ -254,6 +266,8 @@ export class AddOrderComponent {
     a.result.then((r) => {
       this.userLocation = r;
       this.deliveryPrice = r.price;
+      this.deliveryActualPrice = r.price;
+
       console.log(r);
     });
   }
@@ -421,6 +435,7 @@ export class AddOrderComponent {
     return Number.parseInt(string);
   }
   deliveryPrice = 0;
+  deliveryActualPrice = 0;
 
   //
   getProducts() {
@@ -446,45 +461,28 @@ export class AddOrderComponent {
       }
     }
 
+    return inputOrderProdectsIdsWithQnt;
+  }
+  getProductsWithoutDelivery() {
     const r = {
-      inputOrderProjectsIdsWithQnt: inputOrderProdectsIdsWithQnt,
+      tag: 'addWithoutDelivery',
+      inputOrderProjectsIdsWithQnt: this.getProducts(),
       user: this.user,
+    };
+    return r;
+  }
+  getProductsWithDelivery() {
+    const r = {
+      tag: 'add',
+      inputOrderProjectsIdsWithQnt: this.getProducts(),
+      user: this.user,
+      price: this.deliveryPrice,
+      actualPrice: this.deliveryActualPrice,
       userLocation: this.userLocation,
-      currency: this.currency,
       deliveryMan: this.deliveryMan,
     };
-    console.log(r);
     return r;
-
-    // const data1 = JSON.stringify({
-    //   tag: 'add',
-    //   inputOrderProdectsIdsWithQnt: inputOrderProdectsIdsWithQnt,
-    //   inputUserId: this.user.user_id,
-    //   inputProjectCurrencyId: this.currency.project_currency_id,
-    // });
-    // //
-    // this.properties.addWithOutExit(
-    //   this.properties.urls.order_url,
-    //   data1,
-    //   (e) => {
-    //     console.log(e);
-    //   }
-    //   // this.activeModal
-    // );
   }
-
-  // this.products.forEach((e) => {
-  //   if (e.productName) {
-  //     console.log(e);
-  //   }
-
-  //   var j = {
-  //     inputOrderProjectsIdsWithQnt: 1,
-  //   };
-
-  //   console.log(j);
-
-  // });
 
   openModalShowOrder() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
@@ -495,29 +493,13 @@ export class AddOrderComponent {
         centered: true,
       }
     );
-    //
-    // const a = this.properties.sharedMethod.modalService.open(ModalShowOrder, {
-    //   keyboard: false,
-    //   backdrop: 'static',
-    //   centered: true,
-    //   fullscreen: false,
-    //   animation: true,
-    //   scrollable: true,
-    // });
-    a.componentInstance.onOpen(this.getProducts());
-    // console.log(a);
-    // a.result.then((r: any) => {
-    //   this.products = [{
-    //     productId: null,
-    //     productNo: null,
-    //     productName: null,
-    //     productQuantity: '',
-    //     productPrice: 0,
-    //     avg: 0,
-    //   }];
-    //   // this.products = [this.product];
-    //   this.user = null;
-    // });
+    var orderData = this.getProductsWithoutDelivery();
+    if (this.orderWithDelivery == true) {
+      orderData = this.getProductsWithDelivery();
+    }
+    console.log(orderData);
+
+    a.componentInstance.onOpen(orderData);
   }
   openModalUpdateUserName() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
