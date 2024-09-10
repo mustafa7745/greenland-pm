@@ -8,51 +8,73 @@
   ></button>
 </div>
 <div class="modal-body">
-  <div class="row">
-    <div class="col">
-     
-      <input
-        type="text"
-        class="form-control"
-        placeholder="street"
-        [(ngModel)]="street"
-      />
-      
-      <textarea 
-      class="form-control"
-        placeholder="nearTo"
-        [(ngModel)]="nearTo">
-        
-      </textarea>
-     
-      <input
-        type="text"
-        class="form-control"
-        placeholder="contactPhone"
-        [(ngModel)]="contactPhone"
-      />
-      <input
-        type="text"
-        class="form-control"
-        placeholder="url"
-        [(ngModel)]="url"
-      />
-      <input
-        type="text"
-        class="form-control"
-        placeholder="latLong"
-        [(ngModel)]="latLong"
-      />
+  <div class="card">
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="street" class="form-label">الشارع</label>
+        <input
+          type="text"
+          id="street"
+          class="form-control"
+          placeholder="أدخل اسم الشارع"
+          [(ngModel)]="street"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="nearTo" class="form-label">بالقرب من</label>
+        <textarea 
+          id="nearTo"
+          class="form-control"
+          placeholder="أدخل وصف الموقع القريب"
+          [(ngModel)]="nearTo"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="contactPhone" class="form-label">رقم التواصل</label>
+        <input
+          type="text"
+          id="contactPhone"
+          class="form-control"
+          placeholder="أدخل رقم التواصل"
+          [(ngModel)]="contactPhone"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="url" class="form-label">رابط الموقع</label>
+        <input
+          type="text"
+          id="url"
+          class="form-control"
+          placeholder="أدخل رابط الموقع"
+          [(ngModel)]="url"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label for="latLong" class="form-label">الرمز الجغرافي</label>
+        <input
+          type="text"
+          id="latLong"
+          class="form-control"
+          placeholder="أدخل الرمز الجغرافي"
+          [(ngModel)]="latLong"
+        />
+      </div>
+    </div>
+    <div class="card-footer text-end">
+      <button
+        type="button"
+        class="btn btn-success"
+        [disabled]="isDisabledSaveButton()"
+        (click)="onSave()"
+      >
+        حفظ
+      </button>
     </div>
   </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-success"
-      [disabled]="isDisabledSaveButton()"
-      (click)="onSave()"
-    >
-      Save
-    </button>
-  </div>
 </div>
+

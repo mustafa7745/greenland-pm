@@ -11,6 +11,7 @@ import { StateController } from '../../data/shared/stateController';
   standalone: true,
   imports: [CommonModule, FormsModule, NgbDropdownModule],
   templateUrl: './read.component.html',
+  styleUrl : './read.component.css'
 })
 export class OrdersComponent {
   requestServer = new ResquestServer();

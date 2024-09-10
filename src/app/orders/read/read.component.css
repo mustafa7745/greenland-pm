@@ -1,0 +1,21 @@
+.table-sm td,
+.table-sm th {
+  font-size: 0.8rem; /* تصغير حجم النصوص */
+}
+
+.table {
+  margin-top: 1rem;
+  direction: rtl;
+}
+
+.btn-sm {
+  font-size: 0.75rem; /* تصغير حجم النصوص في الأزرار */
+}
+
+.search input {
+  font-size: 0.75rem; /* تصغير حجم النصوص في حقل البحث */
+}
+
+.search button {
+  font-size: 0.75rem; /* تصغير حجم النصوص في الأزرار */
+}

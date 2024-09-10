@@ -23,13 +23,13 @@ export class ModalSearchDeliveryMen {
     this.stateController.errorInnerSearch = '';
 
     var data3 = {
-      tag: 'read',
+      tag: 'search',
       inputUserPhone: this.searchText,
     };
 
     this.requestServer.request2(
       data3,
-      this.requestServer.sharedMethod.urls.reservationUrl,
+      this.requestServer.sharedMethod.urls.deliveryMenUrl,
       (result) => {
         this.result = JSON.parse(result);
         // this.activeModal.close(result);

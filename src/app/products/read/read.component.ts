@@ -556,46 +556,37 @@ export class ProductsModal {
     const date = new Date(item);
     return this.requestServer.sharedMethod.formatTimeAgo(date);
   }
-  sendRequsetConfirmOrder() {
-    const data2 = this.requestServer.encryptData2();
-    if (data2.length > 0) {
-      const loadingModal =
-        this.requestServer.sharedMethod.customModal.loadingModal();
-      loadingModal.componentInstance.title =
-        'جاري الاضافة الجلسه يرجى الانتظار ';
-      const formData =
-        this.requestServer.sharedMethod.apiFormData.getFormData1();
+  assignOrderToDeliveryMan() {
+    const loadingModal =
+      this.requestServer.sharedMethod.customModal.loadingModal();
+    loadingModal.componentInstance.title = 'يرجى الانتظار';
 
-      //
+    var data3 = {
+      tag: 'assignOrderToDeliveryMan',
+      inputDeliveryManId: this.deliveryMan.id,
+      inputOrderDeliveryId: this.orderDelivery.id,
+    };
 
-      var data3 = JSON.stringify({
-        tag: 'add',
-        inputDeliveryManId: this.deliveryMan.id,
-        inputOrderDeliveryId: this.orderDelivery.id,
-      });
+    this.requestServer.request2(
+      data3,
+      this.requestServer.sharedMethod.urls.ordersUrl,
+      (result) => {
+        loadingModal.close();
+        // this.activeModal.close(result);
+        this.orderDeliveryMan = null;
+        this.orderDelivery = JSON.parse(result);
 
-      formData.set('data2', data2);
-      formData.set('data3', data3);
-      //
-      this.requestServer.request(
-        formData,
-        this.requestServer.sharedMethod.urls.acceptaceUrl,
-        (result) => {
-          loadingModal.close();
-          this.activeModal.close(result);
-
-          const successModal =
-            this.requestServer.sharedMethod.customModal.successModal();
-          successModal.componentInstance.result = 'تم بنجاح';
-        },
-        (error) => {
-          loadingModal.close();
-          const errorModal =
-            this.requestServer.sharedMethod.customModal.errorModal();
-          errorModal.componentInstance.result = error;
-        }
-      );
-    }
+        const successModal =
+          this.requestServer.sharedMethod.customModal.successModal();
+        successModal.componentInstance.result = 'تم بنجاح';
+      },
+      (error) => {
+        loadingModal.close();
+        const errorModal =
+          this.requestServer.sharedMethod.customModal.errorModal();
+        errorModal.componentInstance.result = error;
+      }
+    );
   }
   addProductToOrder() {
     const loadingModal =
@@ -727,6 +718,8 @@ export class ProductsModal {
       this.requestServer.sharedMethod.customModal.loadingModal();
     loadingModal.componentInstance.title = 'جاري الاضافة الجلسه يرجى الانتظار ';
 
+    console.log(this.systemOrderNumber);
+    
     var data3 = {
       tag: 'updateSystemOrderNumber',
       inputOrderId: this.data.id,
@@ -781,7 +774,7 @@ export class ProductsModal {
 
   getAllFinalPrice() {
     var sum = this.getProductsFinalPrice() + this.getOffersFinalPrice();
-    
+
     if (this.products.discount) {
       const amount = this.products.discount.amount;
       if (this.products.discount.type == '0') {

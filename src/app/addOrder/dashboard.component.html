@@ -1,6 +1,4 @@
 <div>
- 
-
   <div *ngIf="!user" style="text-align: center">
     <button (click)="openModalSearchUser()" class="btn btn-primary">
       اختيار عميل
@@ -32,109 +30,84 @@
       </button>
     </div>
 
-    <div style="margin: 10px">
+    <div style="margin: 10px; display: flex; justify-content: space-between">
       <button (click)="openModalReadOrders()" class="btn btn-primary">
         عرض الطلبات السابقة
       </button>
-    </div>
-
-    <!--  -->
-    <div
-      style="
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 60px;
-        background-color: gainsboro;
-      "
-    >
-      <div>
+      <!-- Order with Delivery Toggle -->
+      <div class="form-check form-switch mb-2">
         <input
           class="form-check-input"
           type="checkbox"
-          role="switch"
-          id="flexSwitchCheckDefault"
+          id="orderWithDeliverySwitch"
           (change)="changeOrderWithDelivery($event)"
           [checked]="orderWithDelivery"
         />
-        <span>الطلب مع التوصيل</span>
+        <label class="form-check-label" for="orderWithDeliverySwitch">
+          الطلب مع التوصيل
+        </label>
       </div>
-      <div
-        *ngIf="orderWithDelivery == true"
-        style="
-          display: flex;
-          align-items: center;
-          height: 60px;
-          background-color: gainsboro;
-        "
-      >
-        <button
-          *ngIf="!userLocation"
-          (click)="openModalReadUserLocations()"
-          class="btn btn-primary"
-        >
-          اختيار موقع التوصيل للعميل
-        </button>
-        <div *ngIf="userLocation" style="margin: 10px; border: 1px solid">
-          <span (click)="openModalReadUserLocations()">الشارع : </span>
-          <span>
-            {{ userLocation.street }}
-          </span>
-          <span> | </span>
+    </div>
 
-          <span>بالقرب من : </span>
-          <span>
-            {{ userLocation.nearTo }}
-          </span>
-          <span> | </span>
-
-          <input
-            type="number"
-            placeholder="سعر التوصيل"
-            [(ngModel)]="deliveryPrice"
-          />
+    <!--  -->
+    <div class="card p-3 mb-3">
+      <div class="row">
+        <!-- Left Section -->
+        <div class="col-md-6">
+          <!-- User Location -->
+          <div *ngIf="orderWithDelivery" class="mb-2">
+            <div>
+              <button
+                *ngIf="!userLocation"
+                (click)="openModalReadUserLocations()"
+                class="btn btn-primary btn-sm"
+              >
+                اختيار موقع التوصيل للعميل
+              </button>
+              <div *ngIf="userLocation" class="p-2 border rounded">
+                <small class="fw-bold">الشارع:</small>
+                <small>{{ userLocation.street }}</small>
+                <span class="mx-2">|</span>
+                <small class="fw-bold">بالقرب من:</small>
+                <small>{{ userLocation.nearTo }}</small>
+                <span class="mx-2">|</span>
+                <input
+                  type="number"
+                  class="form-control form-control-sm d-inline-block w-auto"
+                  placeholder="سعر التوصيل"
+                  [(ngModel)]="deliveryPrice"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <input
-            class="form-check-input"
-            type="checkbox"
-            role="switch"
-            id="flexSwitchCheckDefault"
-            (change)="changeAutoSelectDelveryMan($event)"
-            [checked]="autoSelectDelveryMan"
-          />
-          <span>اختيار الي لموصل الطلب</span>
-        </div>
-        <div *ngIf="!autoSelectDelveryMan">
-          <button
-            *ngIf="!deliveryMan"
-            (click)="openModalReadReservations()"
-            class="btn btn-primary"
-          >
-            اختيار لموصل الطلب
-          </button>
-          <span *ngIf="deliveryMan" (click)="openModalReadReservations()">
-            {{ deliveryMan.name }}
-          </span>
-        </div>
-
-        <div>
-          <input
-            class="form-check-input"
-            type="checkbox"
-            role="switch"
-            id="flexSwitchCheckDefault"
-            (change)="changeDelveryWithOrder($event)"
-            [checked]="isDeliveryWithOrder"
-          />
-          <span>احتساب التوصيل مع الطلب</span>
+        <!-- Right Section -->
+        <div class="col-md-6">
+          <!-- Delivery Man Selection -->
+          <div *ngIf="orderWithDelivery" class="mb-2">
+            <button
+              *ngIf="!deliveryMan"
+              (click)="openModalReadReservations()"
+              class="btn btn-primary btn-sm"
+            >
+              اختيار لموصل الطلب
+            </button>
+            <span class="fw-bold">الموصل:</span>
+            <span
+              *ngIf="deliveryMan"
+              (click)="openModalReadReservations()"
+              class="btn btn-outline-secondary btn-sm"
+            >
+              {{ deliveryMan.name }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
 
     <!--  -->
   </div>
-  <div class="table-scrollable" style="max-height: 400px; overflow-y: auto">
+  <div class="table-scrollable" style="max-height: 300px; overflow-y: auto">
     <table class="table table-hover" style="direction: rtl">
       <thead>
         <tr>

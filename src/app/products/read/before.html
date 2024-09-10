@@ -564,3 +564,133 @@
       <div class="no-delivery">لا يوجد توصيل في هذا الطلب</div>
     </ng-template>
   </div>
+
+
+  <tr *ngIf="deliveryMan">
+    <td>
+      اسم الموصل:
+      {{ deliveryMan.name }}
+    </td>
+    <td>
+      <button
+        class="btn btn-primary"
+        (click)="sendRequsetConfirmOrder()"
+      >
+        ارسال الطلب
+      </button>
+    </td>
+  </tr>
+
+
+
+  <tr *ngIf="orderDelivery.deliveryManId; else selectDeliveryMan">
+    <td>
+      <ng-container *ngIf="!data.systemOrderNumber; else orderNumber">
+        <div class="order-number-update">
+          <input
+            type="text"
+            placeholder="رقم الطلب في الفاتورة"
+            [(ngModel)]="systemOrderNumber"
+          />
+          <button
+            class="btn btn-primary"
+            (click)="updateSystemOrderNumber()"
+          >
+            حفظ
+          </button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="orderDeliveryMan">
+        <div>تفاصيل الموصل:</div>
+        <div class="delivery-man-info">
+          <span>{{ orderDeliveryMan.name }}</span>
+          <span>{{ orderDeliveryMan.phone }}</span>
+        </div>
+      </ng-container>
+      <ng-template #orderNumber>
+        <div class="order-number-display">
+          <span>رقم الطلب في الفاتورة:</span>
+          {{ data.systemOrderNumber }}
+        </div>
+      </ng-template>
+      <button (click)="readOrderDeliveryMan()" class="btn btn-primary">
+        عرض الموصل
+      </button>
+      <hr />
+
+      <button
+        (click)="openChooseDeliveryManModal()"
+        class="btn btn-primary"
+      >
+        تغيير موصل اخر
+      </button>
+    </td>
+    <td>
+      <div>وقت القبول:</div>
+      <div>{{ getDate(orderDelivery.acceptance.updatedAt) }}</div>
+      <div>وقت ارسال طلب القبول:</div>
+      <div>{{ getDate(orderDelivery.acceptance.createdAt) }}</div>
+    </td>
+  </tr>
+  <ng-template #selectDeliveryMan>
+    <tr
+      *ngIf="
+        orderDelivery.acceptance;
+        else selectDeliveryManNoAcceptance
+      "
+    >
+      <td colspan="2">
+        {{
+          orderDelivery.acceptance.status == "0"
+            ? "لم يقبل الطلب بعد"
+            : "تم قبول الطلب"
+        }}
+        <div *ngIf="!orderDeliveryMan">
+          <button
+            (click)="
+              readOrderDeliveryManOnAcceptance(
+                orderDelivery.acceptance.deliveryManId
+              )
+            "
+            class="btn btn-primary"
+          >
+            عرض الموصل
+          </button>
+          <hr />
+        </div>
+
+        <hr />
+        <ng-container *ngIf="orderDeliveryMan">
+          <div>تفاصيل الموصل:</div>
+          <div class="delivery-man-info">
+            <span>{{ orderDeliveryMan.name }}</span>
+            <span>{{ orderDeliveryMan.phone }}</span>
+          </div>
+        </ng-container>
+        <ng-template #orderNumber>
+          <div class="order-number-display">
+            <span>رقم الطلب في الفاتورة:</span>
+            {{ data.systemOrderNumber }}
+          </div>
+        </ng-template>
+        <button
+          (click)="openChooseDeliveryManModal()"
+          class="btn btn-primary"
+        >
+          تغيير موصل اخر
+        </button>
+      </td>
+    </tr>
+    <ng-template #selectDeliveryManNoAcceptance>
+      <tr>
+        <td colspan="2">
+          <button
+            (click)="openChooseDeliveryManModal()"
+            class="btn btn-primary"
+          >
+            اختيار موصل
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </ng-template>
