@@ -124,6 +124,9 @@ export class AddOrderComponent {
     );
     a.result.then((r) => {
       this.user = r;
+      this.isDeliveryWithOrder = false;
+      this.userLocation = false;
+      this.deliveryMan = false;
     });
   }
   openModalReadOrders() {
