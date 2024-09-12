@@ -66,6 +66,10 @@ export class ProductsModal {
   productQuantity = '';
   offerQuantity = '';
 
+  closeModal(){
+    this.activeModal.close(this.data);
+  }
+
   @Output() messageEvent = new EventEmitter<number>();
   //
   @Input() c = 1;
@@ -572,7 +576,7 @@ export class ProductsModal {
       this.requestServer.sharedMethod.urls.ordersUrl,
       (result) => {
         loadingModal.close();
-        // this.activeModal.close(result);
+        this.data.situationId = 20
         this.orderDeliveryMan = null;
         this.orderDelivery = JSON.parse(result);
 

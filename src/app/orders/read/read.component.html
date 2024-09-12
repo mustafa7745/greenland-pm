@@ -1,139 +1,164 @@
 <!-- <button (click)="read()">read</button> -->
-
-<div *ngIf="isLoading; then thenBlock; else elseBlock"></div>
-<ng-template #thenBlock>
-  <div style="text-align: center">
-    <div class="spinner-border" role="status">
-      <span class="sr-only"></span>
+<div class="container mt-3">
+  <div *ngIf="resultSearchData">
+    <table class="table table-sm table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>تاريخ الإنشاء</th>
+          <th>الرمز</th>
+          <th>الحالة</th>
+          <th>المنتجات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ resultSearchData.id }}</td>
+          <td>{{ getDate(resultSearchData.createdAt) }}</td>
+          <td>{{ resultSearchData.code }}</td>
+          <td>{{ resultSearchData.situation }}</td>
+          <td>
+            <button
+              (click)="openProducts(resultSearchData)"
+              class="btn btn-outline-success btn-sm"
+            >
+              المنتجات
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="search" style="display: flex">
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        placeholder="رقم الطلب"
+        [(ngModel)]="searchText"
+      />
+    </div>
+    <div class="mb-3">
+      <button
+        type="submit"
+        class="btn btn-primary btn-sm"
+        (click)="search()"
+        *ngIf="!stateController.isLoadingInnerSearch"
+      >
+        بحث
+      </button>
+      <button
+        class="btn btn-primary btn-sm"
+        type="button"
+        disabled
+        *ngIf="stateController.isLoadingInnerSearch"
+      >
+        <span
+          class="spinner-border spinner-border-sm"
+          role="status"
+          aria-hidden="true"
+        ></span>
+      </button>
     </div>
   </div>
-</ng-template>
-<!-- 1 -->
-<ng-template #elseBlock>
-  <div *ngIf="isError; then thenBlock1; else elseBlock1"></div>
-  <ng-template #thenBlock1>
-    <div style="text-align: center">
-      <div>
-        <div
-          style="
-            border: 1px solid rgb(255, 8, 8);
-            border-radius: 60px;
-            width: 500px;
-            margin: auto;
-            height: 300px;
-            display: flex;
-            justify-items: center;
-            align-items: center;
-            background-color: aliceblue;
-          "
-        >
-          <div style="width: -webkit-fill-available">
-            <div style="margin: 10px; color: red">
-              {{ error }}
-            </div>
+  <!--  -->
+  <div style="display: flex; justify-content: space-between; direction: rtl">
+    <ng-container *ngFor="let item of orderStatus | keyvalue">
+      <button
+        (click)="read(item.key)"
+        type="submit"
+        [ngClass]="[
+          selected != item.key ? 'btn btn-outline-primary' : 'btn btn-primary'
+        ]"
+      >
+        {{ item.value }}
+      </button>
+    </ng-container>
+  </div>
 
-            <button
-              *ngIf="!isSearchMode"
-              (click)="read()"
-              class="btn btn-outline-danger"
-            >
-              اعادة المحاولة
-            </button>
-            <button
-              *ngIf="isSearchMode"
-              (click)="search()"
-              class="btn btn-outline-danger"
-            >
-              اعادة المحاولة
-            </button>
-          </div>
-        </div>
+  <div *ngIf="isLoading; then thenBlock; else elseBlock"></div>
+  <ng-template #thenBlock>
+    <div style="text-align: center">
+      <div class="spinner-border" role="status">
+        <span class="sr-only"></span>
       </div>
     </div>
   </ng-template>
-  <ng-template #elseBlock1>
-    <div class="container mt-3">
-      <div *ngIf="resultSearchData">
-        <table class="table table-sm table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>تاريخ الإنشاء</th>
-              <th>الرمز</th>
-              <th>الحالة</th>
-              <th>المنتجات</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ resultSearchData.id }}</td>
-              <td>{{ getDate(resultSearchData.createdAt) }}</td>
-              <td>{{ resultSearchData.code }}</td>
-              <td>{{ resultSearchData.situation }}</td>
-              <td>
-                <button
-                  (click)="openProducts(resultSearchData)"
-                  class="btn btn-outline-success btn-sm"
-                >
-                  المنتجات
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="search" style="display: flex;">
-        <div class="mb-3">
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            placeholder="رقم الطلب"
-            [(ngModel)]="searchText"
-          />
-        </div>
-        <div class="mb-3">
-          <button
-            type="submit"
-            class="btn btn-primary btn-sm"
-            (click)="search()"
-            *ngIf="!stateController.isLoadingInnerSearch"
-          >
-            بحث
-          </button>
-          <button
-            class="btn btn-primary btn-sm"
-            type="button"
-            disabled
-            *ngIf="stateController.isLoadingInnerSearch"
-          >
-            <span
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
-          </button>
-        </div>
-      </div>
 
-      <div *ngIf="resultData.length === 0" class="text-center">
-        لاتوجد طلبات معلقة
+  <!-- 1 -->
+  <ng-template #elseBlock>
+    <div *ngIf="isError; then thenBlock1; else elseBlock1"></div>
+    <ng-template #thenBlock1>
+      <div style="text-align: center">
+        <div>
+          <div
+            style="
+              border: 1px solid rgb(255, 8, 8);
+              border-radius: 60px;
+              width: 500px;
+              margin: auto;
+              height: 300px;
+              display: flex;
+              justify-items: center;
+              align-items: center;
+              background-color: aliceblue;
+            "
+          >
+            <div style="width: -webkit-fill-available">
+              <div style="margin: 10px; color: red">
+                {{ error }}
+              </div>
+
+              <button
+                *ngIf="!isSearchMode"
+                (click)="read()"
+                class="btn btn-outline-danger"
+              >
+                اعادة المحاولة
+              </button>
+              <button
+                *ngIf="isSearchMode"
+                (click)="search()"
+                class="btn btn-outline-danger"
+              >
+                اعادة المحاولة
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+    </ng-template>
+    <ng-template #elseBlock1>
+      <div
+        style="display: flex; justify-content: space-between; direction: rtl"
+      ></div>
 
       <table class="table table-sm table-bordered table-striped">
         <thead>
           <tr>
             <th>#</th>
-            <th>تاريخ الإنشاء</th>
+            <th>رقم الطلب</th>
             <th>الحالة</th>
+            <!-- <th>تسلسل الحاله</th> -->
             <th>المنتجات</th>
+            <th>تاريخ الإنشاء</th>
           </tr>
         </thead>
         <tbody>
           <ng-container *ngFor="let item of resultData; let i = index">
             <tr>
+              <td>{{ i + 1 }}</td>
               <td>{{ item.id }}</td>
-              <td>{{ getDate(item.createdAt) }}</td>
+
               <td>{{ item.situation }}</td>
+              <!-- <td>
+                <button
+                  (click)="openProducts(item)"
+                  class="btn btn-outline-success btn-sm"
+                >
+                  التسلسل
+                </button>
+              </td> -->
               <td>
                 <button
                   (click)="openProducts(item)"
@@ -142,10 +167,15 @@
                   المنتجات
                 </button>
               </td>
+              <td>{{ getDate(item.createdAt) }}</td>
             </tr>
           </ng-container>
         </tbody>
       </table>
-    </div>
+ 
+      <div *ngIf="resultData.length === 0" class="text-center">
+        لاتوجد بيانات
+      </div>
+    </ng-template>
   </ng-template>
-</ng-template>
+</div>
