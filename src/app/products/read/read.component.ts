@@ -18,6 +18,7 @@ import { ModalSearchOffer } from '../../search/offers/search.component';
 import { ModalUpdateOfferQuantity } from '../update/offerQuantity/update.component';
 import { ModalUpdateDeliveryPrice } from '../update/price/update.component';
 import { ModalReadUserLocations } from '../../user-locations/read/read.component';
+import { OrderService } from '../../orders/read/order';
 
 @Component({
   selector: 'order-products-info',
@@ -30,16 +31,12 @@ import { ModalReadUserLocations } from '../../user-locations/read/read.component
 export class ProductsModal {
   stateController = new StateController();
   offersStateController = new StateController();
-
   activeModal = inject(NgbActiveModal);
   requestServer = new ResquestServer();
   //
   data: any; // Order
   user: any;
   products: any;
-  delivery: any;
-  location: any;
-  discount: any;
 
   isSearchMode = false;
   searchText = '';
@@ -66,29 +63,13 @@ export class ProductsModal {
   productQuantity = '';
   offerQuantity = '';
 
-  closeModal(){
+  closeModal() {
     this.activeModal.close(this.data);
-  }
-
-  @Output() messageEvent = new EventEmitter<number>();
-  //
-  @Input() c = 1;
-  sendMessageToParent() {
-    this.messageEvent.emit(this.c);
-    this.c = this.c + 1;
-    // console.log(this.c);
   }
   onOpen(data: any) {
     this.data = data;
-    console.log(this.data);
-
-    // this.read();
-
-    console.log(this.data.id);
   }
   readOrderDelivery() {
-    // this.isLoading = true;
-    // this.isError = false;
     const loadingModal =
       this.requestServer.sharedMethod.customModal.loadingModal();
     loadingModal.componentInstance.title = 'يرجى الانتظار';
@@ -123,8 +104,6 @@ export class ProductsModal {
     );
   }
   readUser() {
-    // this.isLoading = true;
-    // this.isError = false;
     const loadingModal =
       this.requestServer.sharedMethod.customModal.loadingModal();
     loadingModal.componentInstance.title = 'يرجى الانتظار';
@@ -138,18 +117,11 @@ export class ProductsModal {
       this.requestServer.sharedMethod.urls.usersUrl,
       (res) => {
         loadingModal.close();
-        // this.isLoading = false;
-        // this.isError = false;
-        // this.resultData = res;
-        console.log(res);
-
         const data = JSON.parse(res);
         this.user = data;
       },
       (e) => {
-        // this.isLoading = false;
-        // this.isError = true;
-        // this.error = e;
+      
         loadingModal.close();
         const errorModal =
           this.requestServer.sharedMethod.customModal.errorModal();
@@ -158,8 +130,6 @@ export class ProductsModal {
     );
   }
   readCenceledDescription() {
-    // this.isLoading = true;
-    // this.isError = false;
     const loadingModal =
       this.requestServer.sharedMethod.customModal.loadingModal();
     loadingModal.componentInstance.title = 'يرجى الانتظار';
@@ -220,37 +190,7 @@ export class ProductsModal {
       }
     );
   }
-  readOrderDeliveryManOnAcceptance(id: string) {
-    const loadingModal =
-      this.requestServer.sharedMethod.customModal.loadingModal();
-    loadingModal.componentInstance.title = 'يرجى الانتظار';
-    const data3 = {
-      tag: 'readById',
-      inputDeliveryManId: id,
-    };
-
-    this.requestServer.request2(
-      data3,
-      this.requestServer.sharedMethod.urls.deliveryMenUrl,
-      (res) => {
-        loadingModal.close();
-        const data = JSON.parse(res);
-        this.orderDeliveryMan = data;
-      },
-      (e) => {
-        // this.isLoading = false;
-        // this.isError = true;
-        // this.error = e;
-        loadingModal.close();
-        const errorModal =
-          this.requestServer.sharedMethod.customModal.errorModal();
-        errorModal.componentInstance.result = e;
-      }
-    );
-  }
   readProducts() {
-    // this.isLoading = true;
-    // this.isError = false;
     const loadingModal =
       this.requestServer.sharedMethod.customModal.loadingModal();
     loadingModal.componentInstance.title = 'يرجى الانتظار';
@@ -265,18 +205,11 @@ export class ProductsModal {
       this.requestServer.sharedMethod.urls.ordersUrl,
       (res) => {
         loadingModal.close();
-        // this.isLoading = false;
-        // this.isError = false;
-        // this.resultData = res;
         const products = JSON.parse(res);
-        console.log(products);
-
+        this.updateSituationId(OrderService.ORDER_VIEWED);
         this.products = products;
       },
       (e) => {
-        // this.isLoading = false;
-        // this.isError = true;
-        // this.error = e;
         loadingModal.close();
         const errorModal =
           this.requestServer.sharedMethod.customModal.errorModal();
@@ -284,8 +217,6 @@ export class ProductsModal {
       }
     );
   }
-  search() {}
-
   openModalDeleteProducts() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
       ModalCustomDelete,
@@ -337,21 +268,6 @@ export class ProductsModal {
       this.offersStateController.selected = [];
     });
   }
-  // openUserLocationModal(item: any) {
-  //   const a = this.requestServer.sharedMethod.customModal.modalService.open(
-  //     UserLocationModal,
-  //     {
-  //       keyboard: false,
-  //       backdrop: 'static',
-  //       centered: true,
-  //       fullscreen: false,
-  //     }
-  //   );
-  //   a.componentInstance.onOpen(item);
-  //   a.result.then((r) => {
-  //     this.resultData.push(JSON.parse(r));
-  //   });
-  // }
   openChooseDeliveryManModal() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
       ModalSearchDeliveryMen,
@@ -576,9 +492,10 @@ export class ProductsModal {
       this.requestServer.sharedMethod.urls.ordersUrl,
       (result) => {
         loadingModal.close();
-        this.data.situationId = 20
+        this.data.situationId = 20;
         this.orderDeliveryMan = null;
         this.orderDelivery = JSON.parse(result);
+        this.updateSituationId(OrderService.ORDER_ASSIGNED_DELIVERY_MAN);
 
         const successModal =
           this.requestServer.sharedMethod.customModal.successModal();
@@ -640,7 +557,6 @@ export class ProductsModal {
       this.requestServer.sharedMethod.urls.ordersUrl,
       (result) => {
         loadingModal.close();
-        // this.activeModal.close(result);
         this.deliveryLocation = null;
         this.orderDelivery = JSON.parse(result);
 
@@ -690,7 +606,7 @@ export class ProductsModal {
       }
     );
   }
-  async readDeliveryLocation() {
+  readDeliveryLocation() {
     const loadingModal =
       this.requestServer.sharedMethod.customModal.loadingModal();
     loadingModal.componentInstance.title = 'يرجى الانتظار ';
@@ -705,7 +621,6 @@ export class ProductsModal {
       this.requestServer.sharedMethod.urls.usersLocationsUrl,
       (res) => {
         loadingModal.close();
-        // this.resultData = res;
         const data = JSON.parse(res);
         this.deliveryLocation = data;
       },
@@ -720,10 +635,8 @@ export class ProductsModal {
   updateSystemOrderNumber() {
     const loadingModal =
       this.requestServer.sharedMethod.customModal.loadingModal();
-    loadingModal.componentInstance.title = 'جاري الاضافة الجلسه يرجى الانتظار ';
+    loadingModal.componentInstance.title = 'يرجى الانتظار';
 
-    console.log(this.systemOrderNumber);
-    
     var data3 = {
       tag: 'updateSystemOrderNumber',
       inputOrderId: this.data.id,
@@ -736,6 +649,7 @@ export class ProductsModal {
       (result) => {
         loadingModal.close();
         this.data.systemOrderNumber = this.systemOrderNumber;
+        this.updateSituationId(OrderService.ORDER_PREPARING);
         const successModal =
           this.requestServer.sharedMethod.customModal.successModal();
         successModal.componentInstance.result = 'تم بنجاح';
@@ -758,8 +672,14 @@ export class ProductsModal {
       }
     );
     a.componentInstance.onOpen(this.data);
+    a.result.then((r) => {
+      this.updateSituationId(OrderService.ORDER_CENCELED);
+    });
   }
 
+  updateSituationId(id: string) {
+    this.data.situationId = id;
+  }
   //
   getProductsFinalPrice() {
     var sum = 0;
@@ -775,7 +695,6 @@ export class ProductsModal {
     });
     return sum;
   }
-
   getAllFinalPrice() {
     var sum = this.getProductsFinalPrice() + this.getOffersFinalPrice();
 
@@ -795,7 +714,6 @@ export class ProductsModal {
     }
     return sum;
   }
-
   toggleProductSelection(productId: number): void {
     const index = this.stateController.selected.indexOf(productId);
     if (index === -1) {
@@ -806,7 +724,6 @@ export class ProductsModal {
       this.stateController.selected.splice(index, 1);
     }
   }
-
   toggleOfferSelection(offerId: number): void {
     const index = this.offersStateController.selected.indexOf(offerId);
     if (index === -1) {

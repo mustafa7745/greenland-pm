@@ -5,6 +5,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ResquestServer } from '../../data/shared/requestServer';
 import { ProductsModal } from '../../products/read/read.component';
 import { StateController } from '../../data/shared/stateController';
+import { OrderService } from './order';
 
 @Component({
   selector: 'order',
@@ -16,15 +17,9 @@ import { StateController } from '../../data/shared/stateController';
 export class OrdersComponent {
   requestServer = new ResquestServer();
   stateController = new StateController();
+
   selected = '0';
-  orderStatus: { [key: number]: string } = {
-    0: 'جديدة',
-    3: 'تم الاطلاع عليها',
-    20: 'اختيار الموصل',
-    25: 'قيد التجهيز',
-    30: 'في الطريق إليك',
-    1000: 'أخرى',
-  };
+  orderStatus = new OrderService().orderStatus;
 
   isSearchMode = false;
   searchText = '';
@@ -80,6 +75,7 @@ export class OrdersComponent {
 
     var data3 = {
       tag: 'search',
+      inputOrderId: this.searchText,
     };
 
     //
@@ -88,6 +84,8 @@ export class OrdersComponent {
       this.requestServer.sharedMethod.urls.ordersUrl,
       (result) => {
         this.resultSearchData = JSON.parse(result);
+        console.log(result);
+
         // this.activeModal.close(result);
         this.stateController.isLoadingInnerSearch = false;
 
