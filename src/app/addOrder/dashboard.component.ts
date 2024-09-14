@@ -263,6 +263,7 @@ export class AddOrderComponent {
         keyboard: false,
         backdrop: 'static',
         centered: true,
+        scrollable:true
       }
     );
     a.componentInstance.onOpen(this.user);

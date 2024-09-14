@@ -52,6 +52,10 @@ export class LoginComponent {
   }
 
   login() {
+    const loadingModal =
+      this.requestServer.sharedMethod.customModal.loadingModal();
+    loadingModal.componentInstance.title = 'يرجى الانتظار ';
+
     const data2 = {
       inputUserPhone: this.getPhone(),
       inputUserPassword: this.password,
@@ -72,19 +76,24 @@ export class LoginComponent {
       this.requestServer.sharedMethod.urls.loginUrl,
       (res) => {
         try {
+          loadingModal.close();
           this.requestServer.sharedMethod.decryptAndSetLogin(res);
 
           // }
         } catch (e) {
           this.requestServer.setServerPublicKey();
-          this.error = 'ERRRO KEY';
-          this.isLoading = false;
+          loadingModal.close();
+          const errorModal =
+            this.requestServer.sharedMethod.customModal.errorModal();
+          errorModal.componentInstance.result = e;
         }
         console.log(res);
       },
       (error) => {
-        this.error = error;
-        this.isLoading = false;
+        loadingModal.close();
+        const errorModal =
+          this.requestServer.sharedMethod.customModal.errorModal();
+        errorModal.componentInstance.result = error;
       }
     );
   }
