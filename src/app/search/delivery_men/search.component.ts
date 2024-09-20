@@ -18,6 +18,7 @@ export class ModalSearchDeliveryMen {
   //
   result: any;
   searchText = '';
+  deliveryMen: any;
   search() {
     this.stateController.isLoadingInnerSearch = true;
     this.stateController.errorInnerSearch = '';
@@ -50,7 +51,34 @@ export class ModalSearchDeliveryMen {
       }
     );
   }
-  choose() {
-    this.activeModal.close(this.result);
+  read() {
+    const loadingModal =
+      this.requestServer.sharedMethod.customModal.loadingModal();
+    loadingModal.componentInstance.title = 'يرجى الانتظار';
+    const formData = this.requestServer.sharedMethod.apiFormData.getFormData1();
+    const data3 = {
+      tag: 'read',
+    };
+
+    this.requestServer.request2(
+      data3,
+      this.requestServer.sharedMethod.urls.deliveryMenUrl,
+      (res) => {
+        loadingModal.close();
+        console.log(res);
+
+        const data = JSON.parse(res);
+        this.deliveryMen = data;
+      },
+      (e) => {
+        loadingModal.close();
+        const errorModal =
+          this.requestServer.sharedMethod.customModal.errorModal();
+        errorModal.componentInstance.result = e;
+      }
+    );
+  }
+  choose(result:any) {
+    this.activeModal.close(result);
   }
 }

@@ -15,6 +15,8 @@ import { ModalSearchDeliveryMen } from '../search/delivery_men/search.component'
 import { ModalShowOrder } from '../show_order/read.component';
 import { ModalUpdateUserName } from '../users/update/name/update.component';
 import { ModalUpdateUserPassword } from '../users/update/password/update.component';
+import { ModalSearchProductByName } from '../search/products/byName/search.component';
+import { ModalShowOrderAfterConfirm } from '../show_order/after-confirm/read.component';
 @Component({
   selector: 'add-order',
   standalone: true,
@@ -40,6 +42,10 @@ export class AddOrderComponent {
     this.getSumAllProducts();
     this.getSumAllProductsWithDelivery();
     console.log(event.key);
+    if (event.key == '*') {
+      this.openModalSearchProducts();
+    }
+
     if (event.key == 'Control') {
       if (this.user != null) {
         if (this.orderWithDelivery) {
@@ -129,6 +135,20 @@ export class AddOrderComponent {
       this.deliveryMan = false;
     });
   }
+  openModalSuccessOrder(item: any) {
+    const a = this.requestServer.sharedMethod.customModal.modalService.open(
+      ModalShowOrderAfterConfirm,
+      {
+        keyboard: false,
+        backdrop: 'static',
+        centered: true,
+      }
+    );
+    a.componentInstance.onOpen(item);
+    // a.result.then((r) => {
+
+    // });
+  }
   openModalReadOrders() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
       ModalReadUserOrders,
@@ -142,6 +162,27 @@ export class AddOrderComponent {
     // a.result.then((r) => {
     //   this.user = r;
     // });
+  }
+  openModalSearchProducts() {
+    const a = this.requestServer.sharedMethod.customModal.modalService.open(
+      ModalSearchProductByName,
+      {
+        keyboard: false,
+        backdrop: 'static',
+        centered: true,
+      }
+    );
+    a.result.then((r) => {
+      // // this.user = r;
+      // const id = this.products.length
+      // console.log(id);
+      // console.log(this.products);
+      // this.products[id] = pro
+      // this.foucsNext(id)
+      // // this.products.push(
+      // // )
+      // console.log(r);
+    });
   }
 
   deliveryMan: any;
@@ -263,7 +304,7 @@ export class AddOrderComponent {
         keyboard: false,
         backdrop: 'static',
         centered: true,
-        scrollable:true
+        scrollable: true,
       }
     );
     a.componentInstance.onOpen(this.user);
@@ -504,6 +545,13 @@ export class AddOrderComponent {
     console.log(orderData);
 
     a.componentInstance.onOpen(orderData);
+    a.result.then((r: any) => {
+      this.user = null;
+      this.deliveryMan = null;
+      this.userLocation = null;
+      this.products = [this.product];
+      this.openModalSuccessOrder(r);
+    });
   }
   openModalUpdateUserName() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(

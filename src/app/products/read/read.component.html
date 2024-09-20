@@ -21,6 +21,13 @@
     <div style="text-align: center; direction: rtl">تفاصيل الطلب</div>
     <div># {{ data.id }}</div>
     <div>{{ getDate(data.createdAt) }}</div>
+    <button
+      *ngIf="data.situationId != '1' && data.situationId != '2'"
+      class="btn btn-outline-danger"
+      (click)="openModalCencelOreder()"
+    >
+      الغاء الطلب
+    </button>
   </h6>
 
   <button
@@ -331,16 +338,6 @@
   <!-- Component Template -->
 
   <!-- Component Styles (CSS or SCSS) -->
-
-  <div *ngIf="products">
-    <button
-      *ngIf="data.situationId != '1' && data.situationId != '2'"
-      class="btn btn-outline-danger"
-      (click)="openModalCencelOreder()"
-    >
-      الغاء الطلب
-    </button>
-  </div>
 
   <table class="custom-table" *ngIf="products">
     <thead>

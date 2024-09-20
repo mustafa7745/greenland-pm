@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-title">اختيار مستخدم</h4>
+  <h4 class="modal-title" id="modal-title">بحث عن منتج</h4>
   <button
     type="button"
     class="btn-close"
@@ -8,14 +8,12 @@
   ></button>
 </div>
 <div class="modal-body">
-  <div style="display: flex; justify-content: center; margin: 10px">
-    <button class="btn btn-primary" (click)="openModalAddUser()">اضافة</button>
-  </div>
   <span style="color: red">
     {{ stateController.errorInnerSearch }}
   </span>
   <div class="search" style="display: flex">
     <input
+      style="direction: rtl"
       type="text"
       class="form-control"
       placeholder="Search Here .."
@@ -43,22 +41,31 @@
       ></span>
     </button>
   </div>
-  <div
-    *ngIf="result"
-    style="
-      direction: rtl;
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-      border: 1px solid;
-      padding: 10px;
-      border-radius: 20px;
-      align-items: center;
-    "
+  <ng-template
+    *ngIf="result.length > 0"
+    ngFor
+    let-item
+    [ngForOf]="result"
+    let-c="index"
   >
-    <button class="btn btn-success" (click)="choose()">اختيار</button>
-    <span>
-      {{ result.name }}
-    </span>
-  </div>
+    <div
+      style="
+        direction: rtl;
+        direction: rtl;
+        display: flex;
+        justify-content: space-between;
+        margin: 10px;
+        border: 1px solid;
+        padding: 10px;
+        border-radius: 10px;
+      "
+    >
+      {{ item.name }}
+      <span>
+        {{ item.number }}
+      </span>
+
+      <button class="btn btn-primary" (click)="choose(item)">اختيار</button>
+    </div>
+  </ng-template>
 </div>

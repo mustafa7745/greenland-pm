@@ -11,6 +11,10 @@
   <span style="color: red">
     {{ stateController.errorInnerSearch }}
   </span>
+  <div *ngIf="result" style="direction: rtl">
+    {{ result.name }}
+    <button class="btn btn-primary" (click)="choose(result)">اختيار</button>
+  </div>
   <div class="search" style="display: flex">
     <input
       type="text"
@@ -39,8 +43,29 @@
       ></span>
     </button>
   </div>
-  <div *ngIf="result" style="direction: rtl;">
-    {{ result.name }}
-    <button class="btn btn-primary" (click)="choose()">اختيار</button>
-  </div>
+  <button (click)="read()" class="btn btn-primary">عرض الكل</button>
+  <ng-template
+    *ngIf="deliveryMen"
+    ngFor
+    let-item
+    [ngForOf]="deliveryMen"
+    let-c="index"
+  >
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        direction: rtl;
+        border: 1px solid;
+        padding: 5px;
+        margin: 5px;
+        border-radius: 10px;
+      "
+    >
+      <span>{{ item.name }}</span>
+      <span>{{ item.phone }}</span>
+      <span>{{ item.ordersDelivery.length }}</span>
+      <button class="btn btn-primary" (click)="choose(item)">اختيار</button>
+    </div>
+  </ng-template>
 </div>

@@ -21,6 +21,12 @@ export class ProductController {
       return product.number == number;
     });
   }
+  getProductByName(name: string) {
+    return this.getProducts().filter(product => product.name.includes(name));
+    // return this.getProducts().find((product) => {
+    //   return product.name.includes(name);
+    // });
+  }
   getProductById(id: string) {
     return this.getProducts().find((product) => {
       return product.id == id;

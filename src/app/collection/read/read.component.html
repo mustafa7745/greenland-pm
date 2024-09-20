@@ -28,7 +28,7 @@
   </button>
 </div>
 <div *ngIf="resultSearchData">
-  <Button (click)="read()">عرض</Button>
+  <Button (click)="read()" class="btn btn-primary">عرض</Button>
   {{ resultSearchData.name }}
 </div>
 <div>
@@ -41,7 +41,7 @@
       <span>المبلغ المحدد: </span>
       {{ getPriceSelected() }}
     </span>
-    <button (click)="collectConfirm()">تحصيل</button>
+    <button (click)="collectConfirm()" class="btn btn-primary">تحصيل</button>
   </div>
   <ng-template ngFor let-item [ngForOf]="resultData" let-c="index">
     <div
@@ -56,7 +56,11 @@
         justify-content: space-between;
       "
     >
-      # {{ item.orderId }}
+      <div>
+        <div># {{ item.orderId }}</div>
+        <div>{{ item.createdAt }}</div>
+      </div>
+
       <span style="font-size: xx-large">
         {{ item.price }}
       </span>

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProductController } from '../products_contoller/c_p_controller';
 import { ResquestServer } from '../data/shared/requestServer';
+import { ModalShowOrderAfterConfirm } from './after-confirm/read.component';
 
 @Component({
   selector: 'show-order',
@@ -47,7 +48,7 @@ export class ModalShowOrder {
   }
   add() {
     var data3;
-    if ((this.data.tag == 'add')) {
+    if (this.data.tag == 'add') {
       data3 = {
         tag: 'add',
         inputUserId: this.data.user.id,
@@ -76,8 +77,8 @@ export class ModalShowOrder {
       this.requestServer.sharedMethod.urls.ordersUrl,
       (res) => {
         console.log('done ');
-
         loadingModal.close();
+        this.activeModal.close(JSON.parse(res))
       },
       (e) => {
         loadingModal.close();
@@ -87,4 +88,5 @@ export class ModalShowOrder {
       }
     );
   }
+  
 }

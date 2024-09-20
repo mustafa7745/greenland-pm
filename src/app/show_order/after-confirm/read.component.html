@@ -1,0 +1,96 @@
+<div class="modal-header">
+ 
+  <h4 class="modal-title" id="modal-title" ><h4> {{ orderContents.products[0].orderId }} </h4> رقم الطلب: 
+
+     
+  </h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <!-- order-summary.component.html -->
+  <table>
+    <thead style="direction: rtl">
+      <tr>
+        <th>#</th>
+        <th>الصنف</th>
+        <th>ك</th>
+        <th>السعر</th>
+        <th>الاجمالي</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Product Rows -->
+      <tr *ngFor="let product of orderContents.products; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ product.productName }}</td>
+        <td>{{ product.productQuantity }}</td>
+        <td>{{ product.productPrice }}</td>
+        <td>
+          {{
+            (
+              parseInt(product.productPrice, 10) *
+              parseInt(product.productQuantity, 10)
+            ).toString()
+          }}
+        </td>
+      </tr>
+
+      <!-- Offer Rows -->
+      <tr *ngFor="let offer of orderContents.offers; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ offer.offerName }}</td>
+        <td>{{ offer.offerQuantity }}</td>
+        <td>{{ offer.offerPrice }}</td>
+        <td>
+          {{
+            (
+              parseInt(offer.offerPrice, 10) * parseInt(offer.offerQuantity, 10)
+            ).toString()
+          }}
+        </td>
+      </tr>
+
+      <!-- Delivery Row -->
+      <tr *ngIf="orderContents.delivery">
+        <td>
+          {{ orderContents.products.length + orderContents.offers.length + 1 }}
+        </td>
+        <td>توصيل الطلب</td>
+        <td>1</td>
+        <td>{{ orderContents.delivery.price }}</td>
+        <td>{{ orderContents.delivery.price }}</td>
+      </tr>
+
+      <!-- Discount Row -->
+      <tr *ngIf="orderContents.discount">
+        <td>
+          {{
+            orderContents.products.length +
+              orderContents.offers.length +
+              (orderContents.delivery ? 1 : 0) +
+              1
+          }}
+        </td>
+        <td>
+          {{ orderContents.discount.type === "0" ? "خصم مئوي" : "خصم رئيسي" }}
+        </td>
+        <td>1</td>
+        <td>{{ orderContents.discount.amount }}</td>
+        <td>{{ orderContents.discount.amount }}</td>
+      </tr>
+
+      <!-- Total Row -->
+      <tr>
+        <td colspan="4" style="text-align: right; background-color: lightgray">
+          اجمالي الفاتورة
+        </td>
+        <td>{{ getAllFinalPrice() }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

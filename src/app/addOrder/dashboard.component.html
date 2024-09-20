@@ -69,7 +69,9 @@
                 class="p-2 border rounded"
                 style="display: flex; justify-content: space-between"
               >
-                <small class="fw-bold">الشارع:</small>
+                <small class="fw-bold" (click)="openModalReadUserLocations()"
+                  >الشارع:</small
+                >
                 <small>{{ userLocation.street }}</small>
                 <span class="mx-2">|</span>
                 <small class="fw-bold">بالقرب من:</small>
@@ -133,6 +135,9 @@
 
     <!--  -->
   </div>
+  <!-- <button (click)="openModalSearchProducts()" class="btn-btn-primary">
+    بحث
+  </button> -->
   <div class="table-scrollable" style="max-height: 300px; overflow-y: auto">
     <table class="table table-hover" style="direction: rtl">
       <thead>

@@ -5,7 +5,9 @@
       <thead>
         <tr>
           <th>#</th>
+          <th>التاريخ</th>
           <th>تاريخ الإنشاء</th>
+          <th>عن طريق التطبيق</th>
           <th>الرمز</th>
           <th>الحالة</th>
           <th>المنتجات</th>
@@ -14,7 +16,12 @@
       <tbody>
         <tr>
           <td>{{ resultSearchData.id }}</td>
+          <td>{{ resultSearchData.createdAt }}</td>
+
           <td>{{ getDate(resultSearchData.createdAt) }}</td>
+          <td>
+            {{ resultSearchData.withApp == "1" ? "نعم" : "لا" }}
+          </td>
           <td>{{ resultSearchData.code }}</td>
           <td>{{ resultSearchData.situation }}</td>
           <td>
@@ -29,7 +36,9 @@
       </tbody>
     </table>
   </div>
-  <span style="color: red;font-size: small;">{{stateController.errorInnerSearch}}</span>
+  <span style="color: red; font-size: small">{{
+    stateController.errorInnerSearch
+  }}</span>
   <div class="search" style="display: flex">
     <div class="mb-3">
       <input
@@ -140,9 +149,10 @@
             <th>#</th>
             <th>رقم الطلب</th>
             <th>الحالة</th>
-            <!-- <th>تسلسل الحاله</th> -->
+            <th>عن طريق التطبيق</th>
             <th>المنتجات</th>
             <th>تاريخ الإنشاء</th>
+            <th>التاريخ</th>
           </tr>
         </thead>
         <tbody>
@@ -161,6 +171,9 @@
                 </button>
               </td> -->
               <td>
+                {{ item.withApp == "1" ? "نعم" : "لا" }}
+              </td>
+              <td>
                 <button
                   (click)="openProducts(item)"
                   class="btn btn-outline-success btn-sm"
@@ -169,11 +182,12 @@
                 </button>
               </td>
               <td>{{ getDate(item.createdAt) }}</td>
+              <td>{{ item.createdAt }}</td>
             </tr>
           </ng-container>
         </tbody>
       </table>
- 
+
       <div *ngIf="resultData.length === 0" class="text-center">
         لاتوجد بيانات
       </div>

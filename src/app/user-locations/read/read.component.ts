@@ -26,6 +26,7 @@ import { ModalUpdateUserLocationUrl } from '../update/url/update.component';
 export class ModalReadUserLocations {
   stateController = new StateController();
   userId: any;
+  user: any;
   activeModal = inject(NgbActiveModal);
   // constructor(public ){}
   requestServer = new ResquestServer();
@@ -60,6 +61,7 @@ export class ModalReadUserLocations {
 
   onOpen(data: any) {
     this.userId = data.id;
+    this.user = data;
     this.read();
   }
   async read() {
@@ -106,7 +108,7 @@ export class ModalReadUserLocations {
         fullscreen: false,
       }
     );
-    a.componentInstance.onOpen(this.userId);
+    a.componentInstance.onOpen(this.user);
     a.result.then((r: any) => {
       this.resultData.push(JSON.parse(r));
       // this.stateController.errorInnerSearch = ''

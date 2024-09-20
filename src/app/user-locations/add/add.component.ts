@@ -31,6 +31,7 @@ export class ModalAddUserLocation {
   }
   onOpen(data: any) {
     this.data = data;
+    this.contactPhone = data.phone;
     // console.log(this.data);
   }
 
@@ -53,13 +54,12 @@ export class ModalAddUserLocation {
 
     var data3 = {
       tag: 'add',
-      inputUserId: this.data,
+      inputUserId: this.data.id,
       inputUserLocationStreet: this.street,
       inputUserLocationNearTo: this.nearTo,
       inputUserLocationContactPhone: this.contactPhone,
       inputUserLocationUrl: this.url,
       inputUserLocationLatLong: this.latLong,
-
     };
 
     //
@@ -82,5 +82,4 @@ export class ModalAddUserLocation {
       }
     );
   }
- 
 }

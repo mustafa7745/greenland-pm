@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  input,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StateController } from '../../data/shared/stateController';
@@ -20,8 +27,8 @@ export class ModalSearchUser {
   result: any;
   searchText = '';
   search() {
-    this.stateController.isLoadingInnerSearch = true
-    this.stateController.errorInnerSearch = ''
+    this.stateController.isLoadingInnerSearch = true;
+    this.stateController.errorInnerSearch = '';
     var data3 = {
       tag: 'read',
       inputUserPhone: this.searchText,
@@ -60,8 +67,20 @@ export class ModalSearchUser {
     );
     a.componentInstance.onOpen(this.searchText);
     a.result.then((r: any) => {
-      this.stateController.errorInnerSearch = ''
+      this.stateController.errorInnerSearch = '';
       this.result = JSON.parse(r);
     });
+  }
+  @ViewChild('inputField') inputField: ElementRef | undefined;
+
+  ngAfterViewInit() {
+    // Set focus on the input field after the view initializes
+    this.inputField!!.nativeElement.focus();
+  }
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.key == 'Enter') {
+      this.search();
+    }
   }
 }
