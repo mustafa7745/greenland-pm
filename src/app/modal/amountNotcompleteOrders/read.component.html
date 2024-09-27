@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">
+    اجمالي الطلبات {{ data.deliveryMan }}
+  </h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <div *ngIf="data.orders.length === 0">لايوجد طلبات</div>
+  <table *ngIf="data.orders.length > 0" class="table" style="direction: rtl">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">رقم الطلب</th>
+        <th scope="col">الاجمالي</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data.orders; let c = index">
+        <td>{{ c + 1 }}</td>
+        <td >{{ item.orderId }}</td>
+        <td>{{ item.sum }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="data.orders.length > 0" class="total-sum">
+    <strong>المجموع الكلي: {{ getTotalSum(data.orders) }}</strong>
+  </div>
+</div>

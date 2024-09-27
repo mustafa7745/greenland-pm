@@ -10,6 +10,7 @@
           <th>عن طريق التطبيق</th>
           <th>الرمز</th>
           <th>الحالة</th>
+          <th>تسلسل الحاله</th>
           <th>المنتجات</th>
         </tr>
       </thead>
@@ -24,6 +25,14 @@
           </td>
           <td>{{ resultSearchData.code }}</td>
           <td>{{ resultSearchData.situation }}</td>
+          <td>
+            <button
+              (click)="openModelReadStatus(resultSearchData)"
+              class="btn btn-outline-success btn-sm"
+            >
+              تسلسل الطلب
+            </button>
+          </td>
           <td>
             <button
               (click)="openProducts(resultSearchData)"

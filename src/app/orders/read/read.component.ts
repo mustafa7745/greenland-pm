@@ -6,6 +6,7 @@ import { ResquestServer } from '../../data/shared/requestServer';
 import { ProductsModal } from '../../products/read/read.component';
 import { StateController } from '../../data/shared/stateController';
 import { OrderService } from './order';
+import { ModalReadOrderStatus } from '../../modal/orderStatus/read.component';
 
 @Component({
   selector: 'order',
@@ -66,6 +67,22 @@ export class OrdersComponent {
         this.error = e;
       }
     );
+  }
+  openModelReadStatus(item:any) { 
+    const a = this.requestServer.sharedMethod.customModal.modalService.open(
+      ModalReadOrderStatus,
+      {
+        keyboard: false,
+        backdrop: 'static',
+        centered: true,
+        scrollable:true,
+        fullscreen: false,
+      }
+    );
+    a.componentInstance.onOpen(item);
+    // a.result.then((r) => {
+    //   this.searchedProduct = r;
+    // });
   }
   search() {
     this.resultSearchData = null;

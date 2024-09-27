@@ -43,7 +43,17 @@
       ></span>
     </button>
   </div>
-  <button (click)="read()" class="btn btn-primary">عرض الكل</button>
+  <div>
+    <button (click)="read()" class="btn btn-primary">عرض الكل</button>
+
+    <span style="text-align: center">
+      <span>اجمالي الطلبات: </span>
+      <span style="background-color: antiquewhite; height: 25px; width: 50px">
+        150000</span
+      >
+    </span>
+  </div>
+
   <ng-template
     *ngIf="deliveryMen"
     ngFor
@@ -64,7 +74,10 @@
     >
       <span>{{ item.name }}</span>
       <span>{{ item.phone }}</span>
-      <span>{{ item.ordersDelivery.length }}</span>
+      <span style="text-align: center">
+        <div>{{ item.ordersDelivery.length }}</div>
+      </span>
+      <button class="btn btn-primary" (click)="readAmount(item)">اجمالي</button>
       <button class="btn btn-primary" (click)="choose(item)">اختيار</button>
     </div>
   </ng-template>

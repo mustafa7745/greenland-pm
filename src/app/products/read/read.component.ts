@@ -19,6 +19,7 @@ import { ModalUpdateOfferQuantity } from '../update/offerQuantity/update.compone
 import { ModalUpdateDeliveryPrice } from '../update/price/update.component';
 import { ModalReadUserLocations } from '../../user-locations/read/read.component';
 import { OrderService } from '../../orders/read/order';
+import { ModalReadOrderStatus } from '../../modal/orderStatus/read.component';
 
 @Component({
   selector: 'order-products-info',
@@ -298,6 +299,7 @@ export class ProductsModal {
       this.searchedProduct = r;
     });
   }
+
   openModelSearchOffer() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
       ModalSearchOffer,

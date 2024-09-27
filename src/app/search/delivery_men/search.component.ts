@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StateController } from '../../data/shared/stateController';
 import { ResquestServer } from '../../data/shared/requestServer';
+import { ModalAmountNotCompleteOrders } from '../../modal/amountNotcompleteOrders/read.component';
 
 @Component({
   selector: 'search-delivery-man',
@@ -55,7 +56,6 @@ export class ModalSearchDeliveryMen {
     const loadingModal =
       this.requestServer.sharedMethod.customModal.loadingModal();
     loadingModal.componentInstance.title = 'يرجى الانتظار';
-    const formData = this.requestServer.sharedMethod.apiFormData.getFormData1();
     const data3 = {
       tag: 'read',
     };
@@ -78,7 +78,60 @@ export class ModalSearchDeliveryMen {
       }
     );
   }
-  choose(result:any) {
+  readAmount(item: any) {
+    var orderIds = [];
+    const orderDelivery = item.ordersDelivery;
+    for (let index = 0; index < orderDelivery.length; index++) {
+      const element = orderDelivery[index]['orderId'];
+      orderIds.push(element);
+    }
+
+    console.log('orders', orderIds);
+
+    const loadingModal =
+      this.requestServer.sharedMethod.customModal.loadingModal();
+    loadingModal.componentInstance.title = 'يرجى الانتظار';
+    const data3 = {
+      tag: 'getAmountNotcompleteOrders',
+      ids: orderIds,
+    };
+
+    this.requestServer.request2(
+      data3,
+      this.requestServer.sharedMethod.urls.deliveryMenUrl,
+      (res) => {
+        loadingModal.close();
+        console.log(res);
+
+        const data = JSON.parse(res);
+
+        this.openOrdersModal({
+          deliveryMan: item.name,
+          orders: data,
+        });
+      },
+      (e) => {
+        loadingModal.close();
+        const errorModal =
+          this.requestServer.sharedMethod.customModal.errorModal();
+        errorModal.componentInstance.result = e;
+      }
+    );
+  }
+  choose(result: any) {
     this.activeModal.close(result);
+  }
+  openOrdersModal(data: any) {
+    const a = this.requestServer.sharedMethod.customModal.modalService.open(
+      ModalAmountNotCompleteOrders,
+      {
+        keyboard: false,
+        backdrop: 'static',
+        centered: true,
+        fullscreen: false,
+        scrollable: true,
+      }
+    );
+    a.componentInstance.onOpen(data);
   }
 }
