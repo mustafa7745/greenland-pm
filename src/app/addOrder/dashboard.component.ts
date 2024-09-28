@@ -37,35 +37,42 @@ export class AddOrderComponent {
   requestServer = new ResquestServer();
   stateController = new StateController();
   //
+  isSearchedOpen = false;
+  isOrderViewOpen = false;
+
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     this.getSumAllProducts();
     this.getSumAllProductsWithDelivery();
     console.log(event.key);
     if (event.key == '*') {
-      this.openModalSearchProducts();
+      if (this.isSearchedOpen === false) {
+        this.openModalSearchProducts();
+      }
     }
 
-    if (event.key == 'Control') {
+    if (event.key == 'ArrowDown') {
       if (this.user != null) {
-        if (this.orderWithDelivery) {
-          if (!this.userLocation) {
-            this.errorModal('يجب اختيار موقع العميل');
-          } else if (!this.deliveryMan) {
-            this.errorModal('يجب اختيار موصل');
-          } else if (this.getProducts().length == 0) {
-            this.errorModal('يجب اختيار منتج واحد على الاقل');
-          } else this.openModalShowOrder();
-        } else {
-          if (this.getProducts().length == 0) {
-            this.errorModal('يجب اختيار منتج واحد على الاقل');
-          } else this.openModalShowOrder();
+        if (this.isOrderViewOpen === false) {
+          if (this.orderWithDelivery) {
+            if (!this.userLocation) {
+              this.errorModal('يجب اختيار موقع العميل');
+            } else if (!this.deliveryMan) {
+              this.errorModal('يجب اختيار موصل');
+            } else if (this.getProducts().length == 0) {
+              this.errorModal('يجب اختيار منتج واحد على الاقل');
+            } else this.openModalShowOrder();
+          } else {
+            if (this.getProducts().length == 0) {
+              this.errorModal('يجب اختيار منتج واحد على الاقل');
+            } else this.openModalShowOrder();
+          }
         }
       } else {
         this.errorModal('يجب اختيار مستخدم');
       }
     }
-    if (event.key == ' ') {
+    if (event.key == 'ArrowLeft') {
       console.log(' ');
       if (this.products.length > 1) {
         let id = Number.parseInt(document.activeElement?.id.substring(5)!);
@@ -162,27 +169,6 @@ export class AddOrderComponent {
     // a.result.then((r) => {
     //   this.user = r;
     // });
-  }
-  openModalSearchProducts() {
-    const a = this.requestServer.sharedMethod.customModal.modalService.open(
-      ModalSearchProductByName,
-      {
-        keyboard: false,
-        backdrop: 'static',
-        centered: true,
-      }
-    );
-    a.result.then((r) => {
-      // // this.user = r;
-      // const id = this.products.length
-      // console.log(id);
-      // console.log(this.products);
-      // this.products[id] = pro
-      // this.foucsNext(id)
-      // // this.products.push(
-      // // )
-      // console.log(r);
-    });
   }
 
   deliveryMan: any;
@@ -386,6 +372,41 @@ export class AddOrderComponent {
     });
   };
 
+  openModalSearchProducts() {
+    this.isSearchedOpen = true;
+    const a = this.requestServer.sharedMethod.customModal.modalService.open(
+      ModalSearchProductByName,
+      {
+        keyboard: false,
+        backdrop: 'static',
+        centered: true,
+      }
+    );
+    a.result
+      .then((r) => {
+        const id = this.products.length - 1;
+
+        this.products[id].productId = r.id;
+        this.products[id].productName = r.name;
+        this.products[id].productNo = r.number;
+        this.products[id].productQuantity = '1';
+        this.products[id].productPrice = r.postPrice;
+
+        this.products.push({
+          productId: null,
+          productNo: null,
+          productName: null,
+          productQuantity: '',
+          productPrice: 0,
+          avg: 0,
+        });
+        this.isSearchedOpen = false;
+      })
+      .catch(() => {
+        this.isSearchedOpen = false;
+      });
+  }
+
   product = {
     productId: null,
     productNo: null,
@@ -404,7 +425,6 @@ export class AddOrderComponent {
       );
 
       if (p) {
-        console.log(this.currency);
         this.products[id].productId = p.id;
         this.products[id].productName = p.name;
         this.products[id].productPrice = p.postPrice;
@@ -414,36 +434,12 @@ export class AddOrderComponent {
           }
         }, 1);
       }
-      // var formData = new FormData();
-      // formData.set('product_number', this.products[id].productNo!);
-      // formData.set('process', 'read');
-      // let req = this.properties.sharedMethod.http.post<any>(
-      //   'http://localhost/store/products.php',
-      //   formData
-      // );
-      // req.subscribe({
-      //   next: (response) => {
-      // this.products[id].productId = response.product_id;
-      // this.products[id].productName = response.product_name;
-      // this.products[id].productPrice =
-      //   response.product_price * this.currency.currency_price;
-      //   },
-      //   error: (err) => {
-      //     console.log(err);
-      //   },
-      // });
     }
   }
-  sum = 0;
   foucsNextQ(id: number) {
     setTimeout(() => {
       console.log(document.activeElement?.id);
     }, 5000);
-
-    // let id = this.products.length -1
-    // this.products[id].avg =this.products[id].productPrice * this.products[id].productQuantity
-    // console.log(this.products[id].avg);
-
     if (this.products.length - 1 == id) {
       if (this.products[id].productName != null) {
         this.products.push({
@@ -475,6 +471,7 @@ export class AddOrderComponent {
       }, 1);
     }
   }
+  sum = 0;
 
   toInt(string: string) {
     return Number.parseInt(string);
@@ -530,6 +527,7 @@ export class AddOrderComponent {
   }
 
   openModalShowOrder() {
+    this.isOrderViewOpen = true;
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
       ModalShowOrder,
       {
@@ -545,13 +543,18 @@ export class AddOrderComponent {
     console.log(orderData);
 
     a.componentInstance.onOpen(orderData);
-    a.result.then((r: any) => {
-      this.user = null;
-      this.deliveryMan = null;
-      this.userLocation = null;
-      this.products = [this.product];
-      this.openModalSuccessOrder(r);
-    });
+    a.result
+      .then((r: any) => {
+        this.user = null;
+        this.deliveryMan = null;
+        this.userLocation = null;
+        this.products = [this.product];
+        this.openModalSuccessOrder(r);
+        this.isOrderViewOpen = false;
+      })
+      .catch(() => {
+        this.isOrderViewOpen = false;
+      });
   }
   openModalUpdateUserName() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
