@@ -215,7 +215,7 @@
               </div>
 
               <!-- رقم الطلب في الفاتورة -->
-              <div class="input-group mb-3" style="direction: ltr;">
+              <div class="input-group mb-3" style="direction: ltr">
                 <input
                   type="text"
                   class="form-control"
@@ -360,6 +360,13 @@
           <button (click)="openModelSearchProduct()" class="primary-button">
             اضافة
           </button>
+          <button
+            (click)="showNumbers()"
+            class="primary-button"
+            style="margin-right: 5px"
+          >
+            عرض الارقام
+          </button>
         </td>
         <td>
           <div
@@ -395,7 +402,10 @@
       </tr>
 
       <tr *ngFor="let item of products.products; let c = index">
-        <td>{{ c + 1 }}</td>
+        <td>
+          {{ c + 1 }} <span *ngIf="item.number">( {{ item.number }} )</span>
+        </td>
+
         <td>{{ item.productName }}</td>
         <td>{{ item.productPrice }}</td>
         <td (click)="openModalUpdateProductQuantity(item)">

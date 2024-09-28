@@ -20,6 +20,7 @@ import { ModalUpdateDeliveryPrice } from '../update/price/update.component';
 import { ModalReadUserLocations } from '../../user-locations/read/read.component';
 import { OrderService } from '../../orders/read/order';
 import { ModalReadOrderStatus } from '../../modal/orderStatus/read.component';
+import { ProductController } from '../../products_contoller/c_p_controller';
 
 @Component({
   selector: 'order-products-info',
@@ -715,6 +716,21 @@ export class ProductsModal {
       sum = sum + Number(this.products.delivery.price);
     }
     return sum;
+  }
+
+  showNumbers(){
+    const controller = new ProductController()
+    for (let index = 0; index < this.products.products.length; index++) {
+      const element = this.products.products[index];
+       const  product = controller.getProductById(element.productId)
+      //  console.log(product);
+      //  console.log(element);
+       
+       
+     if (product) {
+      this.products.products[index].number = product.number;
+     }
+    }   
   }
   toggleProductSelection(productId: number): void {
     const index = this.stateController.selected.indexOf(productId);
