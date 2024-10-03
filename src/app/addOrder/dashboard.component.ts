@@ -212,33 +212,22 @@ export class AddOrderComponent {
 
   getSumAllProducts() {
     var sum = 0;
-    // if (this.products.length > 0) {
+
     this.products.forEach((e) => {
       var q = e.productQuantity;
       if (q != '') {
         sum = sum + e.productPrice * Number.parseInt(q);
       }
     });
-
-    this.sum = sum;
-
     return sum;
-    // return sum;
   }
   getSumAllProductsWithDelivery() {
-    console.log(this.sum);
-    console.log(this.deliveryPrice);
-    console.log(this.deliveryPrice + this.sum);
-
     return this.getSumAllProducts() + this.deliveryPrice;
-    // return sum;
   }
   getFinalSum() {
     if (this.orderHaveDiscount) {
       if (this.orderWithDelivery) {
         if (this.isDeliveryWithOrder) {
-          console.log('dsdd');
-
           return this.getfinalDiscountWithOrder();
         }
         return this.getfinalDiscount() + this.deliveryPrice;
@@ -380,6 +369,7 @@ export class AddOrderComponent {
         keyboard: false,
         backdrop: 'static',
         centered: true,
+        scrollable: true,
       }
     );
     a.result
@@ -415,6 +405,7 @@ export class AddOrderComponent {
     productPrice: 0,
     avg: 0,
   };
+
   products = [this.product];
 
   foucsNext(id: number) {
@@ -471,7 +462,7 @@ export class AddOrderComponent {
       }, 1);
     }
   }
-  sum = 0;
+  // sum = 0;
 
   toInt(string: string) {
     return Number.parseInt(string);
@@ -545,16 +536,30 @@ export class AddOrderComponent {
     a.componentInstance.onOpen(orderData);
     a.result
       .then((r: any) => {
-        this.user = null;
-        this.deliveryMan = null;
-        this.userLocation = null;
-        this.products = [this.product];
+        this.resetData();
         this.openModalSuccessOrder(r);
-        this.isOrderViewOpen = false;
       })
       .catch(() => {
         this.isOrderViewOpen = false;
       });
+  }
+  resetData() {
+    this.user = null;
+    this.deliveryMan = null;
+    this.deliveryPrice = 0;
+    this.userLocation = null;
+    this.products = [];
+    this.resetFirstItem();
+    this.isOrderViewOpen = false;
+  }
+  private resetFirstItem() {
+    this.products = [this.product];
+    this.products[0].productName = null;
+    this.products[0].productPrice = 0;
+    this.products[0].productId = null;
+    this.products[0].productQuantity = '';
+    this.products[0].avg = 0;
+    this.products[0].productNo = null;
   }
   openModalUpdateUserName() {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(

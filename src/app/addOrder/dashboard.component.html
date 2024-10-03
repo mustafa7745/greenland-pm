@@ -20,7 +20,7 @@
       <span (click)="openModalSearchUser()">
         العميل
         <span>
-          {{ user.name }}
+          {{ user.name2 }}
         </span> </span
       ><button class="btn btn-primary" (click)="openModalUpdateUserName()">
         تحديث الاسم
@@ -238,7 +238,7 @@
     >
       اجمالي المنتجات : {{ getSumAllProducts() }}
 
-      <span> الاجمالي النهائي: {{ getFinalSum() }}</span>
+      <span (click)="resetData()"> الاجمالي النهائي: {{ getFinalSum() }}</span>
     </div>
   </div>
 </div>

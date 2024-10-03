@@ -1,13 +1,4 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-title">بحث عن منتج</h4>
-  <button
-    type="button"
-    class="btn-close"
-    aria-describedby="modal-title"
-    (click)="activeModal.dismiss('Cross click')"
-  ></button>
-</div>
-<div class="modal-body">
   <span style="color: red">
     {{ stateController.errorInnerSearch }}
   </span>
@@ -41,6 +32,16 @@
       ></span>
     </button>
   </div>
+  <h4 class="modal-title" id="modal-title">بحث عن منتج</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  
   <ng-template
     *ngIf="result.length > 0"
     ngFor
@@ -50,7 +51,6 @@
   >
     <div
       style="
-        direction: rtl;
         direction: rtl;
         display: flex;
         justify-content: space-between;
@@ -63,6 +63,9 @@
       {{ item.name }}
       <span>
         {{ item.number }}
+      </span>
+      <span>
+       ({{ item.postPrice }} ريال)
       </span>
 
       <button class="btn btn-primary" (click)="choose(item)">اختيار</button>

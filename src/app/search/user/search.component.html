@@ -48,7 +48,6 @@
     style="
       direction: rtl;
       display: flex;
-      justify-content: space-between;
       margin-top: 20px;
       border: 1px solid;
       padding: 10px;
@@ -57,8 +56,11 @@
     "
   >
     <button class="btn btn-success" (click)="choose()">اختيار</button>
-    <span>
-      {{ result.name }}
-    </span>
+    <div style="    margin-right: 20px;
+">
+      <h2>{{ result.name2 }}</h2>
+      <h5>{{ result.name }}</h5>
+      <h5>{{ result.createdAt }}</h5>
+    </div>
   </div>
 </div>
