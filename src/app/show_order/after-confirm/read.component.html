@@ -1,8 +1,6 @@
 <div class="modal-header">
- 
-  <h4 class="modal-title" id="modal-title" ><h4> {{ orderContents.products[0].orderId }} </h4> رقم الطلب: 
-
-     
+  <h4 class="modal-title" id="modal-title">
+    رقم الطلب: {{ orderContents.products[0].orderId }}
   </h4>
   <button
     type="button"
@@ -13,8 +11,8 @@
 </div>
 <div class="modal-body">
   <!-- order-summary.component.html -->
-  <table>
-    <thead style="direction: rtl">
+  <table style="direction: rtl">
+    <thead >
       <tr>
         <th>#</th>
         <th>الصنف</th>
@@ -32,10 +30,9 @@
         <td>{{ product.productPrice }}</td>
         <td>
           {{
-            (
-              parseInt(product.productPrice, 10) *
-              parseInt(product.productQuantity, 10)
-            ).toString()
+            productController.formatPrice(
+              product.productPrice * product.productQuantity
+            )
           }}
         </td>
       </tr>

@@ -216,10 +216,10 @@ export class AddOrderComponent {
     this.products.forEach((e) => {
       var q = e.productQuantity;
       if (q != '') {
-        sum = sum + e.productPrice * Number.parseInt(q);
+        sum = sum + e.productPrice * Number.parseFloat(q);
       }
     });
-    return sum;
+    return this.productsController.roundToNearestFifty(this.productsController.formatPrice(sum))
   }
   getSumAllProductsWithDelivery() {
     return this.getSumAllProducts() + this.deliveryPrice;
@@ -546,6 +546,7 @@ export class AddOrderComponent {
   resetData() {
     this.user = null;
     this.deliveryMan = null;
+    this.orderWithDelivery = false;
     this.deliveryPrice = 0;
     this.userLocation = null;
     this.products = [];
@@ -591,5 +592,12 @@ export class AddOrderComponent {
     // a.result.then((r: any) => {
     //   this.user = r;
     // });
+  }
+
+  roundTo2Decimal(number: number) {
+    // const convertedNumber = number
+    const convertedTo2Dicimal = number.toFixed(2);
+    // console.log(convertedTo2Dicimal);
+    return parseFloat(convertedTo2Dicimal); //remove trail 0
   }
 }

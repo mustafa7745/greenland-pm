@@ -201,7 +201,8 @@
                 class="form-control"
                 type="text"
                 value="{{
-                  products[c].productPrice * toInt(products[c].productQuantity)
+                  roundTo2Decimal(products[c].productPrice * toInt(products[c].productQuantity))
+                  
                 }}"
               />
             </td>
@@ -238,7 +239,9 @@
     >
       اجمالي المنتجات : {{ getSumAllProducts() }}
 
-      <span (click)="resetData()"> الاجمالي النهائي: {{ getFinalSum() }}</span>
+      <span (click)="roundTo2Decimal(4902.434000000001)">
+        الاجمالي النهائي: {{ getFinalSum() }}</span
+      >
     </div>
   </div>
 </div>

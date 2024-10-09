@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ProductController } from '../../products_contoller/c_p_controller';
 
 @Component({
   selector: 'show-order',
@@ -11,6 +12,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrl:'./read.component.css'
 })
 export class ModalShowOrderAfterConfirm {
+  productController = new ProductController()
   activeModal = inject(NgbActiveModal);
   orderContents: any;
 
@@ -20,19 +22,30 @@ export class ModalShowOrderAfterConfirm {
   }
 
   getProductsFinalPrice(): number {
-    return this.orderContents.products.reduce(
-      (
-        sum: number,
-        product: { productPrice: string; productQuantity: string }
-      ) => {
-        return (
-          sum +
-          parseInt(product.productPrice, 10) *
-            parseInt(product.productQuantity, 10)
-        );
-      },
-      0
-    );
+    var sum = 0;
+
+    this.orderContents.products.forEach((e:any) => {
+      var q = e.productQuantity;
+      if (q != '') {
+        sum = sum + e.productPrice * Number.parseFloat(q);
+      }
+    });
+
+    return this.productController.roundToNearestFifty(this.productController.formatPrice(sum))
+
+    // return this.orderContents.products.reduce(
+    //   (
+    //     sum: number,
+    //     product: { productPrice: string; productQuantity: string }
+    //   ) => {
+    //     return (
+    //       sum +
+    //       parseInt(product.productPrice, 10) *
+    //         parseInt(product.productQuantity, 10)
+    //     );
+    //   },
+    //   0
+    // );
   }
 
   getOffersFinalPrice(): number {

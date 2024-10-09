@@ -31,6 +31,7 @@ import { ProductController } from '../../products_contoller/c_p_controller';
   styleUrl: './read.component.css',
 })
 export class ProductsModal {
+  productController = new ProductController()
   stateController = new StateController();
   offersStateController = new StateController();
   activeModal = inject(NgbActiveModal);
@@ -689,7 +690,8 @@ export class ProductsModal {
     this.products.products.forEach((element: any) => {
       sum += Number(element.productPrice) * Number(element.productQuantity);
     });
-    return sum;
+    return this.productController.roundToNearestFifty(this.productController.formatPrice(sum))
+
   }
   getOffersFinalPrice() {
     var sum = 0;

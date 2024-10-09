@@ -35,7 +35,8 @@ export class ModalShowOrder {
       // console.log(this.getProduct(e.id).product_price);
       sum = sum + this.getProduct(e.id).postPrice * e.qnt;
     });
-    return sum;
+
+    return this.product_controller.roundToNearestFifty(this.product_controller.formatPrice(sum))
   }
 
   data: any;
@@ -88,5 +89,9 @@ export class ModalShowOrder {
       }
     );
   }
+  getPrice(id:any){
+    return this.product_controller.getProductById(id).postPrice
+  }
+  
   
 }

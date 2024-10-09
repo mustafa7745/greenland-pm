@@ -15,14 +15,6 @@
     <span>
       {{ data.user.name }}
     </span>
-    <span>
-      {{ data.user.name }}
-    </span>
-  </div>
-  <div>
-    الاجمالي :
-    {{ getFinalPrice() }}
-    <span></span>
   </div>
   <table class="table table-hover" style="direction: rtl">
     <thead>
@@ -30,6 +22,8 @@
         <th scope="col" style="width: 10px">#</th>
         <th scope="col" style="width: 50px">المنتج</th>
         <th scope="col" style="width: 50px">الكمية</th>
+        <th scope="col" style="width: 50px">السعر</th>
+        <th scope="col" style="width: 50px">الاجمالي</th>
       </tr>
     </thead>
 
@@ -50,8 +44,32 @@
           <td>
             {{ item.qnt }}
           </td>
+          <td>
+            {{ getPrice(item.id) }}
+          </td>
+          <td>
+            {{ item.qnt * getPrice(item.id) }}
+          </td>
         </tr>
       </ng-template>
+      <tr>
+        <td colspan="4" style="text-align: right; background-color: lightgray">
+          الاجمالي
+        </td>
+        <td>{{ getFinalPrice() }}</td>
+      </tr>
+      <tr *ngIf="data.price">
+        <td colspan="4" style="text-align: right; background-color: rgb(186, 170, 170)">
+          سعر التوصيل
+        </td>
+        <td>{{ data.price }}</td>
+      </tr>
+      <tr *ngIf="data.price">
+        <td colspan="4" style="text-align: right; background-color: rgb(244, 171, 171)">
+          المبلغ المتوجب دفعه
+        </td>
+        <td>{{ data.price + getFinalPrice() }}</td>
+      </tr>
     </tbody>
   </table>
 

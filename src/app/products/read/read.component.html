@@ -411,7 +411,9 @@
         <td (click)="openModalUpdateProductQuantity(item)">
           {{ item.productQuantity }}
         </td>
-        <td>{{ item.productPrice * item.productQuantity }}</td>
+        <td>{{  productController.formatPrice(
+          item.productPrice * item.productQuantity
+        ) }}</td>
         <td>
           <input
             type="checkbox"
