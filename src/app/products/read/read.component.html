@@ -160,6 +160,9 @@
     <span>
       {{ user.phone }}
     </span>
+    <button (click)="openModalReadOrders()" class="btn btn-primary">
+      عرض الطلبات السابقة
+    </button>
   </div>
   <!-- Component Template -->
   <div *ngIf="isGetDataOrderDelivery" class="order-delivery-container">
@@ -309,6 +312,14 @@
                       <strong>الرمز الجغرافي:</strong>
                       {{ deliveryLocation.latLong }}
                     </div>
+                    <div class="col-6">
+                      <strong>نوع العنوان: </strong>
+                      {{ deliveryLocation.type }}
+                    </div>
+                    <div class="col-6">
+                      <strong>تاريخ الاضافة: </strong>
+                      {{ deliveryLocation.createdAt }}
+                    </div>
                     <div class="col-12 text-center">
                       <a
                         [href]="deliveryLocation.url"
@@ -411,9 +422,13 @@
         <td (click)="openModalUpdateProductQuantity(item)">
           {{ item.productQuantity }}
         </td>
-        <td>{{  productController.formatPrice(
-          item.productPrice * item.productQuantity
-        ) }}</td>
+        <td>
+          {{
+            productController.formatPrice(
+              item.productPrice * item.productQuantity
+            )
+          }}
+        </td>
         <td>
           <input
             type="checkbox"

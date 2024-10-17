@@ -99,6 +99,9 @@ export class AddOrderComponent {
       //   }
       // }
     }
+    if (event.key == '/') {
+      this.openModalSearchUser();
+    }
   }
 
   errorModal(error: any) {
@@ -163,6 +166,7 @@ export class AddOrderComponent {
         keyboard: false,
         backdrop: 'static',
         centered: true,
+        scrollable: true,
       }
     );
     a.componentInstance.onOpen(this.user);
@@ -219,7 +223,9 @@ export class AddOrderComponent {
         sum = sum + e.productPrice * Number.parseFloat(q);
       }
     });
-    return this.productsController.roundToNearestFifty(this.productsController.formatPrice(sum))
+    return this.productsController.roundToNearestFifty(
+      this.productsController.formatPrice(sum)
+    );
   }
   getSumAllProductsWithDelivery() {
     return this.getSumAllProducts() + this.deliveryPrice;
@@ -425,12 +431,13 @@ export class AddOrderComponent {
           }
         }, 1);
       }
+      else{
+        this.playErrorSound()
+      }
     }
   }
   foucsNextQ(id: number) {
-    setTimeout(() => {
-      console.log(document.activeElement?.id);
-    }, 5000);
+    
     if (this.products.length - 1 == id) {
       if (this.products[id].productName != null) {
         this.products.push({
@@ -441,7 +448,12 @@ export class AddOrderComponent {
           productPrice: 0,
           avg: 0,
         });
-        if (this.products[id].productQuantity == '') {
+        const check = this.isStringNonNegativeInteger(
+          this.products[id].productQuantity
+        );
+        console.log(check);
+
+        if (check == false) {
           this.products[id].productQuantity = '1';
         }
         // console.log(this.products);
@@ -461,6 +473,19 @@ export class AddOrderComponent {
         }
       }, 1);
     }
+  }
+  playErrorSound() {
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    oscillator.type = 'sine'; // Waveform type
+    oscillator.frequency.setValueAtTime(600, audioContext.currentTime); // Frequency in Hz (A4 note)
+    oscillator.connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.1); // Play for 0.5 seconds
+}
+  isStringNonNegativeInteger(value: string): boolean {
+    const regex = /^[1-9]\d*$/; // Regex to check for positive integers
+    return regex.test(value);
   }
   // sum = 0;
 

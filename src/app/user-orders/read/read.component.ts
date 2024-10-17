@@ -7,6 +7,7 @@ import { ResquestServer } from '../../data/shared/requestServer';
 import { StateController } from '../../data/shared/stateController';
 import { ModalSearchProduct } from '../../search/products/search.component';
 import { ProductsModal } from '../../products/read/read.component';
+import { ModalReadOrderStatus } from '../../modal/orderStatus/read.component';
 
 @Component({
   selector: 'orders',
@@ -14,7 +15,7 @@ import { ProductsModal } from '../../products/read/read.component';
   imports: [CommonModule, FormsModule, NgbDropdownModule],
   // providers: [OrdersComponent],
   templateUrl: './read.component.html',
-  styleUrl : './read.component.css'
+  styleUrl: './read.component.css',
 })
 export class ModalReadUserOrders {
   stateController = new StateController();
@@ -108,5 +109,21 @@ export class ModalReadUserOrders {
       }
     );
     a.componentInstance.onOpen(item);
+  }
+  openModelReadStatus(item: any) {
+    const a = this.requestServer.sharedMethod.customModal.modalService.open(
+      ModalReadOrderStatus,
+      {
+        keyboard: false,
+        backdrop: 'static',
+        centered: true,
+        scrollable: true,
+        fullscreen: false,
+      }
+    );
+    a.componentInstance.onOpen(item);
+    // a.result.then((r) => {
+    //   this.searchedProduct = r;
+    // });
   }
 }

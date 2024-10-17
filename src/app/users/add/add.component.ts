@@ -17,7 +17,7 @@ export class ModalAddUser {
   activeModal = inject(NgbActiveModal);
 
   //
-  name = '';
+  name = 'لم يتم تعيين الاسم بعد';
   phone = '';
   //
   productGroup: any;

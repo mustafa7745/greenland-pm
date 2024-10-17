@@ -9,7 +9,9 @@
 </div>
 <div class="modal-body">
   <div style="display: flex; justify-content: center; margin: 10px">
-    <button class="btn btn-primary" (click)="openModalAddUser()">اضافة</button>
+    <button class="btn btn-primary" (click)="openModalAddUser()">
+      اضافة | ({{ searchText.length }})
+    </button>
   </div>
   <span style="color: red">
     {{ stateController.errorInnerSearch }}
@@ -56,8 +58,7 @@
     "
   >
     <button class="btn btn-success" (click)="choose()">اختيار</button>
-    <div style="    margin-right: 20px;
-">
+    <div style="margin-right: 20px">
       <h2>{{ result.name2 }}</h2>
       <h5>{{ result.name }}</h5>
       <h5>{{ result.createdAt }}</h5>

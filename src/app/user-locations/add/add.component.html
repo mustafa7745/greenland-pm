@@ -7,7 +7,8 @@
     (click)="activeModal.dismiss('Cross click')"
   ></button>
 </div>
-<div class="modal-body">
+<div class="modal-body" style="direction: rtl;
+">
   <div class="card">
     <div class="card-body">
       <div class="mb-3">
@@ -43,7 +44,7 @@
         />
       </div>
 
-      <div class="mb-3">
+      <!-- <div class="mb-3">
         <label for="url" class="form-label">رابط الموقع</label>
         <input
           type="text"
@@ -52,7 +53,7 @@
           placeholder="أدخل رابط الموقع"
           [(ngModel)]="url"
         />
-      </div>
+      </div> -->
 
       <div class="mb-3">
         <label for="latLong" class="form-label">الرمز الجغرافي</label>
