@@ -11,7 +11,7 @@ export class OrderService {
   orderStatus = {
     [OrderService.ORDER_STARTED]: 'جديدة',
     [OrderService.ORDER_VIEWED]: 'تم الاطلاع عليها',
-    [OrderService.ORDER_ASSIGNED_DELIVERY_MAN]: 'اختيار الموصل',
+    [OrderService.ORDER_ASSIGNED_DELIVERY_MAN]: 'مع الموصل',
     [OrderService.ORDER_PREPARING]: 'قيد التجهيز',
     [OrderService.ORDER_IN_ROAD]: 'في الطريق إليك',
     '1000': 'أخرى',

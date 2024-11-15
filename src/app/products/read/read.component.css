@@ -162,3 +162,35 @@
 .custom-table input[type="checkbox"] {
   cursor: pointer;
 }
+
+/* order-details.component.css */
+
+.order-details-container {
+  display: flex;
+  width: 100%;
+  height: 160px;
+  padding: 16px;
+  background-color: #f2f2f2;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.labels-column,
+.values-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: bold;
+  color: gray;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.value {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 8px;
+}

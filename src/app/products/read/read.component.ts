@@ -22,6 +22,11 @@ import { OrderService } from '../../orders/read/order';
 import { ModalReadOrderStatus } from '../../modal/orderStatus/read.component';
 import { ProductController } from '../../products_contoller/c_p_controller';
 import { ModalReadUserOrders } from '../../user-orders/read/read.component';
+import {
+  SharedOrderINRest,
+  SharedOrderPaid,
+} from '../../orders/SharedOrdersStatus';
+import { ModalUpdateOrderPaid } from '../../orders/update/paid/update.component';
 
 @Component({
   selector: 'order-products-info',
@@ -480,9 +485,9 @@ export class ProductsModal {
 
       // this.orderDelivery.actualPrice =  r.price;
       if (this.products) {
-         this.products.delivery.price = r.price;
+        this.products.delivery.price = r.price;
       }
-     
+
       this.updateOrderLocation(r.id);
       // console.log(r,"fdfdf");
 
@@ -503,6 +508,20 @@ export class ProductsModal {
     a.componentInstance.onOpen(item);
     a.result.then((r) => {
       this.products.discount = JSON.parse(r);
+    });
+  }
+  openUpdatePaid() {
+    const a = this.requestServer.sharedMethod.customModal.modalService.open(
+      ModalUpdateOrderPaid,
+      {
+        keyboard: false,
+        backdrop: 'static',
+        centered: true,
+      }
+    );
+    a.componentInstance.onOpen(this.data);
+    a.result.then((r) => {
+      this.data = JSON.parse(r);
     });
   }
   //
@@ -592,8 +611,8 @@ export class ProductsModal {
       (result) => {
         loadingModal.close();
         this.deliveryLocation = null;
-        console.log(result,'sss');
-        
+        console.log(result, 'sss');
+
         this.orderDelivery = JSON.parse(result);
 
         const successModal =
@@ -784,6 +803,52 @@ export class ProductsModal {
     } else {
       // إذا كانت العرض محددة، ازلها من القائمة
       this.offersStateController.selected.splice(index, 1);
+    }
+  }
+
+  // دالة لإرجاع النص بناءً على القيمة الرقمية لحالة الدفع
+  getPaymentMethod(): string {
+    switch (this.data.paid) {
+      case SharedOrderPaid.ELECTEONIC_PAID:
+        return 'دفع الكتروني';
+      case SharedOrderPaid.PAID_FROM_WALLET:
+        return 'دفع من المحفظة';
+      case SharedOrderPaid.PAID_IN_STORE:
+        return 'دفع نقدي في المطعم';
+      case SharedOrderPaid.PAID_ON_DELIVERY:
+        return 'دفع عند التسليم';
+      default:
+        return 'عند تسليم الطلب';
+    }
+  }
+
+  // دالة لإرجاع النص بناءً على القيمة الرقمية لطريقة التسليم
+  getDeliveryMethod(): string {
+    switch (this.data.inrest) {
+      case SharedOrderINRest.CAR:
+        return 'الى السيارة';
+      case SharedOrderINRest.SAFARY:
+        return 'سفري';
+      case SharedOrderINRest.MAHALY:
+        return 'محلي';
+      case SharedOrderINRest.FAMILY:
+        return 'محلي عوائل';
+      default:
+        return 'تسليم الى العنوان';
+    }
+  }
+  getPaymentStatus(): string {
+    switch (this.data.paid) {
+      case SharedOrderPaid.ELECTEONIC_PAID:
+        return 'تم الدفع الكترونياً';
+      case SharedOrderPaid.PAID_FROM_WALLET:
+        return 'تم الدفع من المحفظة';
+      case SharedOrderPaid.PAID_IN_STORE:
+        return 'تم الدفع نقداً في المطعم';
+      case SharedOrderPaid.PAID_ON_DELIVERY:
+        return 'تم الدفع عند التسليم';
+      default:
+        return 'لم يتم الدفع بعد';
     }
   }
 }

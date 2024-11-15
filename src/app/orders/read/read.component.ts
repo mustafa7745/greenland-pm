@@ -36,6 +36,8 @@ export class OrdersComponent {
   resultSearchData: any;
   //
   cParent = 0;
+
+  pendingOrdersNumber: any;
   ngOnInit() {
     this.requestServer.sharedMethod.browserPlatform(async () => {
       this.read();
@@ -68,14 +70,38 @@ export class OrdersComponent {
       }
     );
   }
-  openModelReadStatus(item:any) { 
+  readOrdersPendingCountFun() {
+    const loadingModal =
+      this.requestServer.sharedMethod.customModal.loadingModal();
+    loadingModal.componentInstance.title = 'يرجى الانتظار ';
+
+    var data3 = {
+      tag: 'readOrdersPendingCount'
+    };
+
+    this.requestServer.request2(
+      data3,
+      this.requestServer.sharedMethod.urls.ordersUrl,
+      (result) => {
+        loadingModal.close();
+        this.pendingOrdersNumber = JSON.parse(result);
+      },
+      (error) => {
+        loadingModal.close();
+        const errorModal =
+          this.requestServer.sharedMethod.customModal.errorModal();
+        errorModal.componentInstance.result = error;
+      }
+    );
+  }
+  openModelReadStatus(item: any) {
     const a = this.requestServer.sharedMethod.customModal.modalService.open(
       ModalReadOrderStatus,
       {
         keyboard: false,
         backdrop: 'static',
         centered: true,
-        scrollable:true,
+        scrollable: true,
         fullscreen: false,
       }
     );

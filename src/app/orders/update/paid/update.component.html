@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-title">دفع الطلب</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-describedby="modal-title"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col">
+      <button class="btn btn-outline-primary" style="margin: 10px" (click)="onSave()">
+        دفع نقدي في المتجر
+      </button>
+      <!-- <button class="btn btn-outline-primary" style="margin: 10px">
+        دفع الكتروني(حوالة)
+      </button> -->
+    </div>
+  </div>
+</div>
+<!-- <div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-success"
+    [disabled]="isDisabledSaveButton()"
+    (click)="onSave()"
+  >
+    Save
+  </button>
+</div> -->

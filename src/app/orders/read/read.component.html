@@ -48,7 +48,7 @@
   <span style="color: red; font-size: small">{{
     stateController.errorInnerSearch
   }}</span>
-  <div class="search" style="display: flex">
+  <div class="search" style="display: flex; justify-content: start">
     <div class="mb-3">
       <input
         type="text"
@@ -79,6 +79,14 @@
         ></span>
       </button>
     </div>
+  </div>
+  <div>
+    <div *ngIf="pendingOrdersNumber">
+      {{ pendingOrdersNumber.count }}
+      |
+      {{ getDate(pendingOrdersNumber.date) }}
+    </div>
+    <div (click)="readOrdersPendingCountFun()">عدد الطلبات المعلقة</div>
   </div>
   <!--  -->
   <div style="display: flex; justify-content: space-between; direction: rtl">

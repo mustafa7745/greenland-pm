@@ -38,6 +38,28 @@
   ></button>
 </div>
 <hr />
+<!-- order-details.component.html -->
+
+<div class="order-details-container">
+  <div class="labels-column">
+    <p class="label">رقم الطلب</p>
+    <p class="label">طريقة الدفع:</p>
+    <p class="label">حالة الدفع:</p>
+    <p class="label">عنوان التسليم</p>
+  </div>
+
+  <div class="values-column">
+    <p class="value">{{ data.id }}</p>
+    <p class="value">{{ getPaymentMethod() }}</p>
+    <p class="value">{{ getPaymentStatus() }}</p>
+    <p class="value">{{ getDeliveryMethod() }}</p>
+  </div>
+  <button class="btn btn-primary" (click)="openUpdatePaid()">
+    دفع قيمة الطلب
+  </button>
+</div>
+
+<hr />
 
 <div class="modal-body">
   <div style="display: flex; justify-content: space-evenly">
@@ -322,7 +344,10 @@
                     </div>
                     <div class="col-12 text-center">
                       <a
-                        [href]="deliveryLocation.url"
+                        [href]="
+                          'https://www.google.com/maps?q=' +
+                          deliveryLocation.latLong
+                        "
                         target="_blank"
                         class="btn btn-link"
                       >
@@ -555,6 +580,7 @@
           (click)="openModalUpdateDiscountType(products.discount)"
         >
           {{ products.discount.type == "0" ? "خصم مئوي" : "خصم رئيسي" }}
+          <span *ngIf="products.discount.couponId"> (كوبون) </span>
         </td>
         <td (click)="openModalUpdateDiscountAmount(products.discount)">
           {{ products.discount.amount }}
